@@ -141,7 +141,17 @@ export function RegisterForm() {
                 {form.formState.errors.root.message}
               </p>
             )}
-            <Button className="w-full" type="submit" disabled={isPending}>
+            <Button
+              className="w-full"
+              type="submit"
+              disabled={isPending}
+              onClick={() =>
+                console.log(
+                  "Create account button clicked",
+                  form.formState.errors
+                )
+              }
+            >
               {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Create account
             </Button>
