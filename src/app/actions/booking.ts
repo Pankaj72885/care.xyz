@@ -70,3 +70,62 @@ export async function createBooking(data: BookingCreateServerInput) {
     return { error: "Failed to create booking" };
   }
 }
+
+export async function getUserBookings() {
+  const session = await auth();
+  if (!session?.user?.id) {
+    return [];
+  }
+
+  try {
+    const bookings = await prisma.booking.findMany({
+      where: { userId: session.user.id },
+      include: { service: true },
+      orderBy: { createdAt: "desc" },
+    });
+    return bookings;
+  } catch (error) {
+    console.error("Get bookings error:", error);
+    return [];
+  }
+}
+
+export async function cancelBooking(bookingId: string) {
+  const session = await auth();
+  if (!session?.user?.id) {
+    return { error: "Unauthorized" };
+  }
+
+  try {
+    const booking = await prisma.booking.findUnique({
+      where: { id: bookingId },
+    });
+
+    if (!booking) {
+      return { error: "Booking not found" };
+    }
+
+    if (booking.userId !== session.user.id) {
+      return { error: "Unauthorized" };
+    }
+
+    if (booking.status === "COMPLETED" || booking.status === "CANCELLED") {
+      return {
+        error: "Cannot cancel a completed or already cancelled booking",
+      };
+    }
+
+    // Business rule: e.g. cannot cancel if less than 2 hours before? (Not in DB yet, ignoring for now)
+
+    await prisma.booking.update({
+      where: { id: bookingId },
+      data: { status: "CANCELLED" },
+    });
+
+    revalidatePath("/dashboard/bookings");
+    return { success: true };
+  } catch (error) {
+    console.error("Cancel booking error:", error);
+    return { error: "Failed to cancel booking" };
+  }
+}
