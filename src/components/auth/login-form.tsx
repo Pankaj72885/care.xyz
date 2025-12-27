@@ -52,8 +52,16 @@ export function LoginForm() {
           return;
         }
 
-        // Let middleware handle redirect based on role
-        window.location.href = "/";
+        // Fetch session to get user role
+        const response = await fetch("/api/auth/session");
+        const session = await response.json();
+
+        // Redirect based on role
+        if (session?.user?.role === "ADMIN") {
+          window.location.href = "/admin";
+        } else {
+          window.location.href = "/dashboard";
+        }
       } catch {
         form.setError("root", {
           message: "Something went wrong. Please try again.",
