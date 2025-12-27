@@ -25,16 +25,17 @@ enum DurationUnit {
 }
 
 model User {
-  id            String   @id @default(cuid())
-  email         String   @unique
-  passwordHash  String?  // null if using Google only
-  googleId      String?  @unique
+  id            String    @id @default(cuid())
+  email         String    @unique
+  emailVerified DateTime?
+  passwordHash  String?   // null if using Google only
+  googleId      String?   @unique
   name          String
-  nid           String?  @unique
+  nid           String?   @unique
   contact       String?
-  role          Role     @default(USER)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  role          Role      @default(USER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
   bookings      Booking[]
   accounts      Account[]
   image         String?
