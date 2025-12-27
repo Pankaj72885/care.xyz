@@ -58,8 +58,8 @@ export function RegisterForm() {
           return;
         }
 
-        console.log("Registration successful, redirecting to login...");
-        router.push("/login?registered=true");
+        console.log("Registration successful, redirecting to booking page...");
+        router.push("/services");
       } catch (error) {
         console.error("Registration exception:", error);
         form.setError("root", {
@@ -80,6 +80,19 @@ export function RegisterForm() {
       <CardContent className="grid gap-4">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="nid"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>NID No</FormLabel>
+                  <FormControl>
+                    <Input placeholder="National ID Number" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="name"
@@ -128,7 +141,7 @@ export function RegisterForm() {
               name="contact"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Contact (Optional)</FormLabel>
+                  <FormLabel>Contact</FormLabel>
                   <FormControl>
                     <Input placeholder="+880..." {...field} />
                   </FormControl>
