@@ -126,6 +126,24 @@ As an admin, you have access to:
 - **Toggle Active Status**: Enable/disable services without deleting
   - Quick on/off switch for each service
 
+### 📅 Booking Management
+
+**View & Update Bookings**
+1. Navigate to **Bookings** from sidebar main dashboard.
+2. You will see a list of all bookings with:
+   - **Booking ID**: Unique identifier.
+   - **User**: Name and email of the customer.
+   - **Service**: Service booked.
+   - **Date**: When the booking was created.
+   - **Status**: Current status (Pending, Confirmed, Completed, Cancelled).
+3. **Change Status**:
+   - Use the dropdown in the "Actions" column to change the status.
+   - Changes are saved immediately.
+
+**Note**: Users can see these status updates in their dashboard.
+
+---
+
 ### 3. **User Management** (`/admin/users`)
 
 - **View All Users**: Complete user list with details

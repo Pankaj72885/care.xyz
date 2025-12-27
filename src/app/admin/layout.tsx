@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import {
   BarChart3,
+  CalendarDays,
   CreditCard,
   Home,
   Layers,
@@ -42,6 +43,13 @@ export default async function AdminLayout({
           >
             <Layers className="h-4 w-4" />
             Services
+          </Link>
+          <Link
+            href="/admin/bookings"
+            className="flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-slate-200 dark:hover:bg-slate-800"
+          >
+            <CalendarDays className="h-4 w-4" />
+            Bookings
           </Link>
           <Link
             href="/admin/users"

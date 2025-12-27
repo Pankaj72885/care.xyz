@@ -42,6 +42,27 @@
 
 ---
 
+### 📅 Booking Management
+
+#### View All Bookings
+
+- **Route**: `/admin/bookings`
+- **Features**:
+  - List of all bookings
+  - Filterable view (planned)
+  - Show user, service, date, and status details
+
+#### Manage Booking Status
+
+- **Location**: `/admin/bookings` (inline)
+- **Features**:
+  - Update status: Pending, Confirmed, Completed, Cancelled
+  - Optimistic UI updates
+  - Status badges for visual clarity
+  - Server action: `updateBookingStatus()`
+
+---
+
 ### 👥 User Management (Full CRUD)
 
 #### View All Users
@@ -118,6 +139,8 @@
 - ✅ `updateService()` - Update service details
 - ✅ `deleteService()` - Delete service (with protection)
 - ✅ `toggleServiceStatus()` - Enable/disable service
+- ✅ `updateBookingStatus()` - Update booking status
+- ✅ `getBookingDetails()` - Fetch details for a single booking
 - ✅ `updateUser()` - Update user information
 - ✅ `updateUserRole()` - Change user role
 - ✅ `deleteUser()` - Delete user (with protection)
