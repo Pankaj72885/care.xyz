@@ -4,6 +4,7 @@ import { Navbar } from "@/components/layout/navbar";
 import { ThemeProvider } from "@/components/theme-provider";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Toaster } from "sonner";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -44,6 +45,7 @@ export default async function RootLayout({
           <Navbar user={session?.user} />
           <div className="flex-1">{children}</div>
           <Footer />
+          <Toaster richColors position="top-right" />
         </ThemeProvider>
       </body>
     </html>
