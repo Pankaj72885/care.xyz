@@ -6,16 +6,16 @@ export function Footer() {
           <p className="text-muted-foreground text-center text-sm leading-loose md:text-left">
             Built by{" "}
             <a
-              href="#"
+              href="https://github.com/Pankaj72885"
               target="_blank"
               rel="noreferrer"
               className="font-medium underline underline-offset-4"
             >
-              Care.xyz Team
+              Pankaj72885
             </a>
             . The source code is available on{" "}
             <a
-              href="#"
+              href="https://github.com/Pankaj72885/care.xyz"
               target="_blank"
               rel="noreferrer"
               className="font-medium underline underline-offset-4"

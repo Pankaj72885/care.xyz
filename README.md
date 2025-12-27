@@ -1,5 +1,8 @@
 # Care.xyz - Health Care Service Booking Platform
 
+[![Live Site](https://img.shields.io/badge/Live-Site-green?style=for-the-badge&logo=vercel)](https://carexyz-production.up.railway.app/)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-black?style=for-the-badge&logo=github)](https://github.com/Pankaj72885/care.xyz)
+
 ![Next.js](https://img.shields.io/badge/Next.js-15-black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-3.8-sky)
@@ -87,7 +90,7 @@ A powerful admin panel to manage the entire platform operation.
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/yourusername/care-xyz.git
+   git clone https://github.com/Pankaj72885/care.xyz.git
    cd care-xyz
    ```
 
