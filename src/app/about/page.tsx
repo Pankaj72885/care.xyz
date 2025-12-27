@@ -1,6 +1,65 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle, Shield, Users } from "lucide-react";
+import type { Metadata } from "next";
 import Image from "next/image";
+
+export const metadata: Metadata = {
+  title: "About Care.xyz - Professional Caregiving Services in Bangladesh",
+  description:
+    "Learn about Care.xyz's mission to connect families with verified, compassionate caregivers. We provide trusted elderly care, baby sitting, and nursing services across Bangladesh with rigorous background checks and quality assurance.",
+  keywords: [
+    "about care.xyz",
+    "caregiving services Bangladesh",
+    "verified caregivers",
+    "professional care services",
+    "elderly care Bangladesh",
+    "baby sitting services",
+    "nursing care",
+    "trusted caregivers",
+    "background checked caregivers",
+    "care platform Bangladesh",
+  ],
+  authors: [{ name: "Care.xyz" }],
+  openGraph: {
+    title: "About Care.xyz - Your Trusted Caregiving Partner",
+    description:
+      "Connecting families with verified, compassionate caregivers. Rigorous background checks, skilled professionals, and peace of mind for your loved ones.",
+    url: "https://care.xyz/about",
+    siteName: "Care.xyz",
+    locale: "en_BD",
+    type: "website",
+    images: [
+      {
+        url: "/og-about.jpg",
+        width: 1200,
+        height: 630,
+        alt: "About Care.xyz - Professional Caregiving Services",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "About Care.xyz - Your Trusted Caregiving Partner",
+    description:
+      "Connecting families with verified, compassionate caregivers across Bangladesh. Quality care you can trust.",
+    images: ["/og-about.jpg"],
+    creator: "@carexyz",
+  },
+  alternates: {
+    canonical: "https://care.xyz/about",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+};
 
 export default function AboutPage() {
   return (

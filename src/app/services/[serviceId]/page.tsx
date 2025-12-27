@@ -26,13 +26,62 @@ export async function generateMetadata({ params }: ServicePageProps) {
 
   if (!service) {
     return {
-      title: "Service Not Found",
+      title: "Service Not Found - Care.xyz",
+      description: "The requested service could not be found.",
     };
   }
 
   return {
-    title: `${service.title} - Care.xyz`,
-    description: service.description,
+    title: `${service.title} - Professional ${service.category} Service | Care.xyz`,
+    description: `${service.description} Book verified caregivers for ${service.title} in Bangladesh. Starting at BDT ${service.baseRate}. Trusted, professional, and reliable care services.`,
+    keywords: [
+      service.title,
+      `${service.category} service`,
+      `${service.category} Bangladesh`,
+      "professional caregiving",
+      "verified caregivers",
+      "book caregiver",
+      "care services",
+      service.category,
+    ],
+    authors: [{ name: "Care.xyz" }],
+    openGraph: {
+      title: `${service.title} - Professional ${service.category} Service`,
+      description: `${service.description} Book now starting at BDT ${service.baseRate}.`,
+      url: `https://care.xyz/services/${serviceId}`,
+      siteName: "Care.xyz",
+      locale: "en_BD",
+      type: "website",
+      images: [
+        {
+          url: "/og-services.jpg",
+          width: 1200,
+          height: 630,
+          alt: `${service.title} - Care.xyz`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${service.title} - Professional ${service.category} Service`,
+      description: `${service.description} Book verified caregivers starting at BDT ${service.baseRate}.`,
+      images: ["/og-services.jpg"],
+      creator: "@carexyz",
+    },
+    alternates: {
+      canonical: `https://care.xyz/services/${serviceId}`,
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
+    },
   };
 }
 

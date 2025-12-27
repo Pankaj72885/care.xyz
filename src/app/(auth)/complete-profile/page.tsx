@@ -1,6 +1,17 @@
 import { auth } from "@/auth";
 import { CompleteProfileForm } from "@/components/auth/complete-profile-form";
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+
+export const metadata: Metadata = {
+  title: "Complete Your Profile - Care.xyz",
+  description:
+    "Complete your Care.xyz profile to access all caregiving services.",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default async function CompleteProfilePage() {
   const session = await auth();
