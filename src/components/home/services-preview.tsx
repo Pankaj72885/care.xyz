@@ -1,14 +1,7 @@
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
+import { ServiceCard } from "../services/service-card";
 
 export async function ServicesPreview() {
   const services = await prisma.service.findMany({
@@ -36,27 +29,7 @@ export async function ServicesPreview() {
         </div>
         <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {services.map((service) => (
-            <Card key={service.id} className="flex flex-col">
-              <CardHeader>
-                <CardTitle className="text-xl">{service.title}</CardTitle>
-                <CardDescription className="capitalize">
-                  {service.category}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="flex-1">
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  {service.description}
-                </p>
-                <div className="mt-4 font-semibold">
-                  From BDT {service.baseRate} / unit
-                </div>
-              </CardContent>
-              <CardFooter>
-                <Button asChild className="w-full">
-                  <Link href={`/services/${service.id}`}>View Details</Link>
-                </Button>
-              </CardFooter>
-            </Card>
+            <ServiceCard key={service.id} service={service} />
           ))}
         </div>
         <div className="mt-10 flex justify-center">
