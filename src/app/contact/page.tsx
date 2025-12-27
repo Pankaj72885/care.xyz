@@ -17,6 +17,26 @@ export const metadata: Metadata = {
   title: "Contact Us - Care.xyz",
   description:
     "Get in touch with Care.xyz. We are here to answer your questions and help you find the best care for your loved ones.",
+  openGraph: {
+    title: "Contact Care.xyz - We're Here to Help",
+    description:
+      "Have questions? Get in touch with our team for support regarding our caregiving services.",
+    siteName: "Care.xyz",
+    locale: "en_BD",
+    type: "website",
+    images: ["/og-contact.jpg"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Contact Care.xyz - Customer Support",
+    description:
+      "Have questions? Get in touch with our team for support regarding our caregiving services.",
+    images: ["/og-contact.jpg"],
+    creator: "@carexyz",
+  },
+  alternates: {
+    canonical: "/contact",
+  },
 };
 
 export default function ContactPage() {

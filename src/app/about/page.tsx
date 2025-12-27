@@ -24,6 +24,26 @@ export const metadata: Metadata = {
   title: "About Care.xyz - Professional Caregiving Services",
   description:
     "Learn about Care.xyz's mission to connect families with verified, compassionate caregivers. We provide trusted elderly care, baby sitting, and nursing services.",
+  openGraph: {
+    title: "About Care.xyz - Professional Caregiving Services",
+    description:
+      "Learn about Care.xyz's mission to connect families with verified, compassionate caregivers.",
+    siteName: "Care.xyz",
+    locale: "en_BD",
+    type: "website",
+    images: ["/og-about.jpg"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "About Care.xyz - Professional Caregiving Services",
+    description:
+      "Learn about Care.xyz's mission to connect families with verified, compassionate caregivers.",
+    images: ["/og-about.jpg"],
+    creator: "@carexyz",
+  },
+  alternates: {
+    canonical: "/about",
+  },
 };
 
 export default function AboutPage() {

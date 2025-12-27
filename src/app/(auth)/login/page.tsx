@@ -16,7 +16,6 @@ export const metadata: Metadata = {
     title: "Login to Care.xyz - Your Caregiving Partner",
     description:
       "Access your account to book and manage professional caregiving services in Bangladesh.",
-    url: "https://care.xyz/login",
     siteName: "Care.xyz",
     locale: "en_BD",
     type: "website",
@@ -36,9 +35,8 @@ export const metadata: Metadata = {
     images: ["/og-auth.jpg"],
     creator: "@carexyz",
   },
-  robots: {
-    index: false, // Don't index login pages
-    follow: true,
+  alternates: {
+    canonical: "/login",
   },
 };
 

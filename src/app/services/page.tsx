@@ -25,7 +25,6 @@ export const metadata: Metadata = {
     title: "Our Care Services - Professional Caregiving in Bangladesh",
     description:
       "Browse verified elderly care, baby sitting, and nursing services. Quality care from background-checked professionals.",
-    url: "https://care.xyz/services",
     siteName: "Care.xyz",
     locale: "en_BD",
     type: "website",
@@ -47,18 +46,7 @@ export const metadata: Metadata = {
     creator: "@carexyz",
   },
   alternates: {
-    canonical: "https://care.xyz/services",
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
+    canonical: "/services",
   },
 };
 

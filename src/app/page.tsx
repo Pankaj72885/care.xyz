@@ -29,7 +29,6 @@ export const metadata: Metadata = {
     title: "Care.xyz - Your Trusted Caregiving Partner in Bangladesh",
     description:
       "Connect with verified, compassionate caregivers for elderly care, baby sitting, and nursing services. Quality care you can trust.",
-    url: "https://care.xyz",
     siteName: "Care.xyz",
     locale: "en_BD",
     type: "website",
@@ -51,18 +50,7 @@ export const metadata: Metadata = {
     creator: "@carexyz",
   },
   alternates: {
-    canonical: "https://care.xyz",
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
+    canonical: "/",
   },
 };
 

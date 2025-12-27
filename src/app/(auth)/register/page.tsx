@@ -17,7 +17,6 @@ export const metadata: Metadata = {
     title: "Join Care.xyz - Connect with Trusted Caregivers",
     description:
       "Create your account to access professional caregiving services. Quick registration and instant access to verified caregivers.",
-    url: "https://care.xyz/register",
     siteName: "Care.xyz",
     locale: "en_BD",
     type: "website",
@@ -38,9 +37,8 @@ export const metadata: Metadata = {
     images: ["/og-auth.jpg"],
     creator: "@carexyz",
   },
-  robots: {
-    index: false, // Don't index registration pages
-    follow: true,
+  alternates: {
+    canonical: "/register",
   },
 };
 
