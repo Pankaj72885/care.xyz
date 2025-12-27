@@ -1,15 +1,6 @@
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { ServiceList } from "@/components/services/service-list";
 import { prisma } from "@/lib/prisma";
 import type { Metadata } from "next";
-import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Our Care Services - Elderly Care, Baby Sitting & Nursing | Care.xyz",
@@ -78,30 +69,23 @@ export default async function ServicesPage() {
   });
 
   return (
-    <div className="container mx-auto px-4 py-10">
-      <h1 className="mb-8 text-center text-3xl font-bold">Our Services</h1>
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {services.map((service) => (
-          <Card key={service.id} className="flex flex-col">
-            <CardHeader>
-              <CardTitle className="text-xl">{service.title}</CardTitle>
-              <CardDescription className="capitalize">
-                {service.category}
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="flex-1">
-              <p className="text-muted-foreground">{service.description}</p>
-              <div className="mt-4 font-semibold">
-                Rate: BDT {service.baseRate} / unit
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button asChild className="w-full">
-                <Link href={`/services/${service.id}`}>View Details</Link>
-              </Button>
-            </CardFooter>
-          </Card>
-        ))}
+    <div className="min-h-screen bg-gray-50/50 dark:bg-zinc-950">
+      {/* Header */}
+      <div className="mb-10 border-b bg-white py-12 md:py-20 dark:bg-zinc-900">
+        <div className="container mx-auto px-4 text-center">
+          <h1 className="mb-4 text-4xl font-extrabold tracking-tight lg:text-5xl">
+            Our Professional Services
+          </h1>
+          <p className="text-muted-foreground mx-auto max-w-2xl text-lg">
+            Browse our wide range of caregiving services. From elderly care to
+            physiotherapy, we connect you with verified professionals in
+            Bangladesh.
+          </p>
+        </div>
+      </div>
+
+      <div className="container mx-auto px-4 pb-20">
+        <ServiceList services={services} />
       </div>
     </div>
   );

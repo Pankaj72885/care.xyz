@@ -5,28 +5,58 @@ const prisma = new PrismaClient();
 
 const services = [
   {
-    title: "Elderly Care",
+    title: "Elderly Care & Companionship",
     slug: "elderly-care",
     description:
-      "Compassionate care for seniors, including companionship, medication reminders, and assistance with daily activities.",
-    category: "elderly",
-    baseRate: 500, // BDT per hour/unit
+      "Compassionate in-home care for seniors. Our caregivers provide companionship, medication reminders, assistance with daily activities, and a friendly face to brighten the day.",
+    category: "Elderly Care",
+    baseRate: 500,
+    imageUrl: "/services/elderly.jpg",
   },
   {
-    title: "Baby Care",
-    slug: "baby-care",
+    title: "Childcare & Babysitting",
+    slug: "childcare-babysitting",
     description:
-      "Professional babysitting and childcare services ensuring safety and engagement for your little ones.",
-    category: "baby",
+      "Trusted, verified babysitters for your peace of mind. Whether for a date night or daily support, our caregivers engage your children in safe, fun, and educational activities.",
+    category: "Childcare",
     baseRate: 400,
+    imageUrl: "/services/childcare.jpg",
   },
   {
-    title: "Post-Operative Care",
-    slug: "post-operative-care",
+    title: "Professional Nursing Care",
+    slug: "professional-nursing",
     description:
-      "Specialized support for patients recovering from surgery, wound dressing, and monitoring vitals.",
-    category: "sick",
-    baseRate: 700,
+      "Skilled nursing care for post-operative recovery, wound dressing, vital monitoring, and injections. Bringing hospital-quality medical support to the comfort of your home.",
+    category: "Nursing",
+    baseRate: 800,
+    imageUrl: "/services/nursing.jpg",
+  },
+  {
+    title: "Physiotherapy & Rehab",
+    slug: "physiotherapy-rehab",
+    description:
+      "Expert physiotherapy sessions at home to help with mobility, injury recovery, and pain management. Personalized exercises designed for your specific needs.",
+    category: "Therapy",
+    baseRate: 1000,
+    imageUrl: "/services/physio.jpg",
+  },
+  {
+    title: "Palliative Care",
+    slug: "palliative-care",
+    description:
+      "Specialized care focused on providing relief from the symptoms and stress of a serious illness. Our goal is to improve quality of life for both the patient and the family.",
+    category: "Nursing",
+    baseRate: 900,
+    imageUrl: "/services/nursing.jpg", // Reusing nursing image
+  },
+  {
+    title: "Full-time Nanny Service",
+    slug: "full-time-nanny",
+    description:
+      "Dedicated full-time nannies to support your growing family. Experienced in infant care, toddler activities, and maintaining a structured routine for your children.",
+    category: "Childcare",
+    baseRate: 15000, // Monthly or day rate logic can be handled in UI, keeping int for now
+    imageUrl: "/services/childcare.jpg", // Reusing childcare image
   },
 ];
 

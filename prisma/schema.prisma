@@ -66,6 +66,7 @@ model Service {
   slug        String   @unique
   description String
   category    String   // "baby" | "elderly" | "sick" (can convert to enum later)
+  imageUrl    String?
   baseRate    Int      // minor unit (e.g., BDT in smallest unit or raw integer)
   active      Boolean  @default(true)
   createdAt   DateTime @default(now())
