@@ -1,6 +1,8 @@
 import { Hero } from "@/components/home/hero";
+import { HowItWorks } from "@/components/home/how-it-works";
 import { Mission } from "@/components/home/mission";
 import { ServicesPreview } from "@/components/home/services-preview";
+import { Testimonials } from "@/components/home/testimonials";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -68,8 +70,10 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between">
       <Hero />
-      <Mission />
+      <HowItWorks />
       <ServicesPreview />
+      <Mission />
+      <Testimonials />
     </main>
   );
 }
