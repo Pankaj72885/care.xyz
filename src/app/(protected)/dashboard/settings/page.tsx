@@ -1,4 +1,4 @@
-import { auth } from "@/auth";
+import { getCurrentUser } from "@/app/actions/user";
 import { SettingsForm } from "@/components/settings/settings-form";
 import {
   Card,
@@ -7,24 +7,21 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { prisma } from "@/lib/prisma";
-import { redirect } from "next/navigation";
 
 export default async function SettingsPage() {
-  const session = await auth();
-
-  if (!session?.user?.id) {
-    redirect("/login");
-  }
-
-  const user = await prisma.user.findUnique({
-    where: {
-      id: session.user.id,
-    },
-  });
+  const user = await getCurrentUser();
 
   if (!user) {
-    redirect("/login");
+    return (
+      <div className="space-y-6">
+        <div>
+          <h3 className="text-lg font-medium">Settings</h3>
+          <p className="text-muted-foreground text-sm">
+            Please log in to manage your account settings.
+          </p>
+        </div>
+      </div>
+    );
   }
 
   return (

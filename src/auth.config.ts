@@ -45,7 +45,7 @@ export const authConfig = {
       }
 
       // Protected routes require authentication
-      // Admins should also be able to access dashboard routes (e.g. settings)
+      // Both regular users and admins can access dashboard, booking, and payment routes
       if (isOnDashboard || isOnBooking || isOnPayment) {
         if (isLoggedIn) return true;
         return false; // Redirect unauthenticated users to login page
@@ -53,7 +53,7 @@ export const authConfig = {
 
       // Redirect logged-in users away from auth pages based on role
       if (isLoggedIn && isOnAuth) {
-        // Admins go to /admin by default when accessing auth pages, but can go to dashboard if they navigate there
+        // Admins go to /admin by default, regular users go to /dashboard
         const redirectUrl = isAdmin ? "/admin" : "/dashboard";
         return Response.redirect(new URL(redirectUrl, nextUrl));
       }
@@ -61,8 +61,11 @@ export const authConfig = {
       return true;
     },
     async session({ session, token }) {
-      if (token.contact && session.user) {
-        session.user.contact = token.contact as string;
+      if (session.user && token.sub) {
+        session.user.id = token.sub;
+        session.user.role = (token.role as "USER" | "ADMIN") || "USER";
+        session.user.nid = token.nid as string | undefined;
+        session.user.contact = token.contact as string | undefined;
       }
 
       // Failsafe: Ensure the seed admin always has the ADMIN role
