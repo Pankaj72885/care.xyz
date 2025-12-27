@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 
@@ -29,7 +28,6 @@ import { LoginInput, loginSchema } from "@/lib/validations/auth";
 import { signIn } from "next-auth/react";
 
 export function LoginForm() {
-  const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<LoginInput>({
@@ -47,7 +45,6 @@ export function LoginForm() {
           email: data.email,
           password: data.password,
           redirect: false,
-          callbackUrl: "/dashboard",
         });
 
         if (result?.error) {
@@ -55,8 +52,8 @@ export function LoginForm() {
           return;
         }
 
-        router.push("/dashboard");
-        router.refresh();
+        // Let middleware handle redirect based on role
+        window.location.href = "/";
       } catch {
         form.setError("root", {
           message: "Something went wrong. Please try again.",
@@ -130,7 +127,7 @@ export function LoginForm() {
         <Button
           variant="outline"
           className="w-full"
-          onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
+          onClick={() => signIn("google")}
         >
           <svg
             className="mr-2 h-4 w-4"
