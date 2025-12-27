@@ -9,11 +9,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Service } from "@prisma/client";
+import { Service as PrismaService } from "@prisma/client";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+
+// Fallback type in case generated types aren't picked up immediately
+type Service = PrismaService & { imageUrl?: string | null };
 
 interface ServiceListProps {
   services: Service[];
