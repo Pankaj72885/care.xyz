@@ -1,112 +1,94 @@
-# Care.xyz - Professional Caregiving Services Platform
+# Care.xyz - Health Care Service Booking Platform
 
-A comprehensive caregiving booking platform for Bangladesh, built with Next.js 16, TypeScript, Prisma, and Stripe.
+![Next.js](https://img.shields.io/badge/Next.js-15-black)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-3.8-sky)
+![Prisma](https://img.shields.io/badge/Prisma-ORM-2D3748)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791)
+![Stripe](https://img.shields.io/badge/Stripe-Payments-635BFF)
 
-## 🎯 Project Overview
+## 📋 Overview
 
-Care.xyz is a web application that enables families in Bangladesh to easily book trusted caregiving services for babies, elderly individuals, and people recovering from illness. The platform features a modern interface, strong authentication, secure payments, and comprehensive booking management.
+**Care.xyz** is a comprehensive full-stack web application designed to facilitate the booking of health care services (such as baby care, elderly care, and post-operative care). Built with modern web technologies, it features a robust role-based access control system (RBAC), secure payment processing, and a powerful admin dashboard for managing the entire platform.
 
-## ✨ Features
+This project demonstrates a production-ready architecture using **Next.js 15 (App Router)**, **Server Actions**, and **PostgreSQL**.
 
-### User Features
+---
 
-- **Authentication**: Email/password and Google OAuth via NextAuth
-- **Service Catalog**: Browse Baby Care, Elderly Care, and Post-Operative Care services
-- **Dynamic Booking**: Multi-step booking form with:
-  - Duration selection (hourly/daily)
-  - Hierarchical location selection (Division → District → City → Area)
-  - Live cost calculation
-  - Address input
-- **Payment Integration**: Secure Stripe payment processing
-- **Booking Management**: View, track, and cancel bookings
-- **Email Notifications**: Automated invoice emails via Resend
-- **User Dashboard**: Overview of bookings and account settings
-- **Dark/Light Mode**: Full theme support
+## ✨ Key Features
 
-### Admin Features
+### 👤 For Users
 
-- **Admin Dashboard**: Overview of bookings, revenue, and services
-- **Payment Management**: View all transactions and receipts
-- **Service Management**: Toggle service availability
-- **Protected Routes**: Role-based access control
+- **Service Discovery**: Browse available care services with detailed descriptions and pricing.
+- **Seamless Booking**: Multi-step booking wizard with location selection and cost calculation.
+- **Secure Payments**: Integrated Stripe checkout for secure transactions.
+- **User Dashboard**:
+  - Track booking history and status.
+  - Complete payments for pending bookings.
+  - Mark services as "Completed" upon delivery.
+- **Authentication**: Secure login via Email/Password or Google OAuth.
 
-## 🛠️ Tech Stack
+### 🛡️ For Admins (Comprehensive Dashboard)
 
-- **Framework**: Next.js 16.1.1 (App Router)
-- **Language**: TypeScript
-- **Runtime**: Bun
-- **Database**: PostgreSQL with Prisma ORM
-- **Authentication**: NextAuth v5
-- **UI Components**: Shadcn UI + Radix UI
-- **Styling**: Tailwind CSS v4
-- **Payments**: Stripe
-- **Email**: Resend
-- **Validation**: Zod
-- **Form Management**: React Hook Form
+A powerful admin panel to manage the entire platform operation.
 
-## 📁 Project Structure
+#### 📊 Dashboard & Analytics
 
-```
-src/
-├── app/
-│   ├── (auth)/              # Authentication pages
-│   │   ├── login/
-│   │   └── register/
-│   ├── (protected)/         # Protected routes
-│   │   ├── booking/[serviceId]/
-│   │   ├── dashboard/
-│   │   │   ├── bookings/
-│   │   │   └── settings/
-│   │   └── payment/[bookingId]/
-│   ├── admin/               # Admin dashboard
-│   │   ├── payments/
-│   │   └── services/
-│   ├── api/
-│   │   ├── auth/[...nextauth]/
-│   │   └── webhooks/stripe/
-│   ├── services/
-│   │   └── [serviceId]/
-│   └── actions/             # Server actions
-│       ├── admin.ts
-│       ├── auth.ts
-│       ├── booking.ts
-│       └── payment.ts
-├── components/
-│   ├── auth/
-│   ├── booking/
-│   ├── dashboard/
-│   ├── home/
-│   ├── layout/
-│   ├── payment/
-│   └── ui/                  # Shadcn UI components
-├── lib/
-│   ├── data/
-│   ├── stripe/
-│   ├── validations/
-│   ├── email.ts
-│   ├── prisma.ts
-│   ├── session.ts
-│   └── utils.ts
-└── types/
-```
+- **Overview Metrics**: Total users, bookings, revenue, and active services.
+- **Visual Reports**: Service performance, revenue breakdown, and top-performing services.
+- **Quick Navigation**: Intuitively designed dashboard with quick access cards.
+
+#### 🔧 Service Management
+
+- **CRUD Operations**: Create, Read, Update, and Delete services.
+- **Status Toggle**: instantly enable/disable services.
+- **SEO Optimized**: Auto-generation of URL-friendly slugs.
+
+#### 📅 Booking Management
+
+- **Centralized View**: Monitor all bookings in the system.
+- **Status Control**: Manually update booking statuses (`PENDING` → `CONFIRMED` → `COMPLETED` / `CANCELLED`).
+- **Real-time Updates**: Changes reflect immediately on user dashboards.
+
+#### 👥 User Management
+
+- **User Database**: View and manage all registered users.
+- **Role Management**: Promote/Demote users (Admin/User access).
+- **Safety Features**: Protection against self-deletion or self-demotion.
+
+#### 💳 Payment Oversight
+
+- **Transaction History**: Monitor all incoming payments and Stripe intents.
+
+---
+
+## 🛠️ Technology Stack
+
+- **Frontend**: Next.js 15, React, Tailwind CSS, Shadcn UI, Lucide Icons
+- **Backend**: Next.js Server Actions, NextAuth.js (v5)
+- **Database**: PostgreSQL, Prisma ORM
+- **Authentication**: NextAuth.js (Credentials + Google OAuth)
+- **Payments**: Stripe API
+- **Tooling**: Bun (Runtime/Package Manager), Zod (Validation), TypeScript
+
+---
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
-- Bun (latest version)
-- PostgreSQL database
-- Stripe account (for payments)
-- Google OAuth credentials (optional)
-- Resend API key (for emails)
+- Node.js or [Bun](https://bun.sh/) installed
+- PostgreSQL database (local or cloud like Neon/Supabase)
+- Stripe Account (for payments)
+- Google Cloud Console Project (for OAuth)
 
 ### Installation
 
 1. **Clone the repository**
 
    ```bash
-   git clone <your-repo-url>
-   cd "Assignment 12"
+   git clone https://github.com/yourusername/care-xyz.git
+   cd care-xyz
    ```
 
 2. **Install dependencies**
@@ -115,167 +97,114 @@ src/
    bun install
    ```
 
-3. **Set up environment variables**
-
-   Copy `.env.example` to `.env` and fill in your credentials:
-
-   ```bash
-   cp .env.example .env
-   ```
-
-   Required variables:
+3. **Configure Environment Variables**
+   Create a `.env` file in the root directory:
 
    ```env
-   DATABASE_URL="postgresql://..."
+   # Database
+   DATABASE_URL="postgresql://user:password@localhost:5432/care_xyz"
+
+   # Auth
    NEXTAUTH_URL="http://localhost:3000"
-   NEXTAUTH_SECRET="your-secret-here"
+   NEXTAUTH_SECRET="your-super-secret-key"
+
+   # Google OAuth
    GOOGLE_CLIENT_ID="your-google-client-id"
    GOOGLE_CLIENT_SECRET="your-google-client-secret"
+
+   # Stripe
    STRIPE_PUBLIC_KEY="pk_test_..."
    STRIPE_SECRET_KEY="sk_test_..."
-   STRIPE_WEBHOOK_SECRET="whsec_..."
-   RESEND_API_KEY="re_..."
    NEXT_PUBLIC_STRIPE_PUBLIC_KEY="pk_test_..."
    ```
 
-4. **Set up the database**
+4. **Initialize Database**
 
    ```bash
-   # Generate Prisma client
    bunx prisma generate
+   bunx prisma db push
+   ```
 
-   # Run migrations
-   bunx prisma migrate dev
+5. **Create Admin User**
+   Run the content seeding script to create a default admin:
 
-   # Seed the database
-   bun prisma/seed.ts
-
-   # Create admin user
+   ```bash
    bun scripts/create-admin.ts
    ```
 
-   **Default Admin Credentials:**
-   - Email: `admin@care.xyz`
-   - Password: `Admin@123456`
-
-   > ⚠️ Change the password after first login!
-
-5. **Run the development server**
-
+6. **Start Development Server**
    ```bash
-   bun run dev
+   bun dev
    ```
-
-   Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-### Building for Production
-
-```bash
-bun run build
-bun run start
-```
-
-## 📊 Database Schema
-
-### Models
-
-- **User**: Authentication and profile information
-- **Account**: OAuth provider accounts
-- **Service**: Available caregiving services
-- **Booking**: Service bookings with location and duration
-- **Payment**: Stripe payment records
-
-### Enums
-
-- **Role**: USER, ADMIN
-- **BookingStatus**: PENDING, CONFIRMED, COMPLETED, CANCELLED
-- **DurationUnit**: HOUR, DAY
-
-## 🔐 Authentication Flow
-
-1. Users can register with email/password or Google OAuth
-2. Passwords are hashed with bcrypt
-3. Sessions are managed via JWT
-4. Protected routes redirect unauthenticated users to login
-5. Authenticated users accessing login/register are redirected to dashboard
-6. Admin routes require ADMIN role
-
-## 💳 Payment Flow
-
-1. User creates a booking (status: PENDING)
-2. User is redirected to payment page
-3. Stripe PaymentIntent is created
-4. User completes payment via Stripe Elements
-5. Webhook confirms payment and:
-   - Updates booking status to CONFIRMED
-   - Creates payment record
-   - Sends invoice email to user
-
-## 📧 Email Notifications
-
-Automated emails are sent via Resend for:
-
-- Booking confirmation with invoice
-- Payment receipt
-- Booking details
-
-## 🎨 UI/UX Features
-
-- **Responsive Design**: Mobile-first approach
-- **Dark/Light Mode**: System preference detection
-- **Loading States**: Skeleton loaders and spinners
-- **Form Validation**: Real-time validation with error messages
-- **Toast Notifications**: User feedback for actions
-- **Accessible Components**: ARIA labels and keyboard navigation
-
-## 🔒 Security Features
-
-- Password hashing with bcrypt
-- CSRF protection
-- Secure session management
-- Environment variable validation
-- Stripe webhook signature verification
-- Role-based access control
-- SQL injection prevention (Prisma)
-
-## 📝 Available Scripts
-
-```bash
-bun run dev          # Start development server
-bun run build        # Build for production
-bun run start        # Start production server
-bun run lint         # Run ESLint
-bunx prisma studio   # Open Prisma Studio
-bunx prisma migrate dev  # Run database migrations
-```
-
-## 🧪 Testing
-
-The project includes:
-
-- TypeScript type checking
-- ESLint for code quality
-- Prisma schema validation
-
-## 🚧 Future Enhancements
-
-- [ ] Caregiver profiles with ratings
-- [ ] Advanced pricing (time-based, special care)
-- [ ] Full Bengali localization
-- [ ] SMS/WhatsApp notifications
-- [ ] Real-time availability calendar
-- [ ] Booking rescheduling
-- [ ] Review and rating system
-- [ ] Advanced search and filters
-
-## 📄 License
-
-This project is part of an assignment for Programming Hero Level-1.
-
-## 👥 Support
-
-For issues or questions, please contact the development team.
+   Visit `http://localhost:3000` to see the app.
 
 ---
 
-**Built with ❤️ using Next.js, TypeScript, and modern web technologies**
+## 📖 Admin Guide
+
+### Accessing the Admin Panel
+
+1. **Login**: Go to `/login` and sign in with admin credentials.
+2. **Redirect**: You will be automatically redirected to `/admin`.
+3. **Navigation**:
+   - **Top Navbar**: Shows "Admin" link and "Admin Panel" in user dropdown.
+   - **Sidebar**: Persistent navigation for Services, Users, Payments, and Bookings.
+   - **Dashboard Cards**: Quick access to key sections.
+
+### Default Admin Credentials
+
+> ⚠️ **Change password immediately after first login**
+
+- **Email**: `admin@care.xyz`
+- **Password**: `Admin@123456`
+
+### Management Features
+
+| Feature | Route | Description |
+|Col1|Col2|Col3|
+|---|---|---|
+| **Services** | `/admin/services` | Add, edit, or remove care services. Toggle visibility. |
+| **Bookings** | `/admin/bookings` | View all bookings. Update status (Confirm/Complete/Cancel). |
+| **Users** | `/admin/users` | Manage user accounts and roles. |
+| **Reports** | `/admin/reports` | View revenue and performance analytics. |
+
+---
+
+## 🧪 Testing Guide
+
+### Test Accounts
+
+| Role      | Email              | Password                                 |
+| --------- | ------------------ | ---------------------------------------- |
+| **Admin** | `admin@care.xyz`   | `Admin@123456`                           |
+| **User**  | `test@example.com` | `password123` (Create via Register page) |
+
+### Testing Flow
+
+1. **User Flow**:
+   - Register a new account.
+   - Browse Services (`/services`).
+   - Book a service (Select Date/Location -> Confirm).
+   - Go to Dashboard (`/dashboard`) -> Pay (if implemented) -> Mark as Completed.
+
+2. **Admin Flow**:
+   - Login as Admin.
+   - Go to Bookings (`/admin/bookings`).
+   - Change a booking status to `CONFIRMED`.
+   - Go to Services (`/admin/services`) -> Create new service -> Verify it appears on homepage.
+
+---
+
+## 👨‍💻 Scripts
+
+The project includes utility scripts for management:
+
+- **Create Admin**: `bun scripts/create-admin.ts` - Creates or resets the default admin user.
+- **Find Admins**: `bun scripts/find-admin.ts` - Lists all admin users in the database.
+- **Prisma Studio**: `bunx prisma studio` - Visual database editor (runs on port 5555).
+
+---
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
