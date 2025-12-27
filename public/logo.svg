@@ -1,0 +1,17 @@
+<svg width="200" height="60" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Heart icon representing care -->
+  <path d="M30 20C30 15.5817 26.4183 12 22 12C19.8783 12 17.9565 12.8435 16.5 14.2087C15.0435 12.8435 13.1217 12 11 12C6.58172 12 3 15.5817 3 20C3 28 16.5 38 16.5 38C16.5 38 30 28 30 20Z" fill="#3B82F6"/>
+  
+  <!-- Care.xyz text -->
+  <text x="40" y="32" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#1E293B">
+    Care
+  </text>
+  <text x="100" y="32" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#3B82F6">
+    .xyz
+  </text>
+  
+  <!-- Tagline -->
+  <text x="40" y="48" font-family="Arial, sans-serif" font-size="9" fill="#64748B">
+    Professional Caregiving Services
+  </text>
+</svg>

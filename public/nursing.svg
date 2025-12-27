@@ -1,0 +1,13 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Nurse/medical professional icon -->
+  <circle cx="12" cy="5" r="3" fill="currentColor"/>
+  <!-- Medical cross on cap -->
+  <rect x="11" y="3" width="2" height="4" fill="white" opacity="0.8"/>
+  <rect x="10" y="4" width="4" height="2" fill="white" opacity="0.8"/>
+  <!-- Body -->
+  <path d="M12 9C8.69 9 6 11.69 6 15V20C6 20.55 6.45 21 7 21H17C17.55 21 18 20.55 18 20V15C18 11.69 15.31 9 12 9Z" fill="currentColor"/>
+  <!-- Medical badge -->
+  <circle cx="12" cy="14" r="2" fill="white" opacity="0.9"/>
+  <path d="M11.5 13H12.5V15H11.5V13Z" fill="currentColor"/>
+  <path d="M11 13.5H13V14.5H11V13.5Z" fill="currentColor"/>
+</svg>
