@@ -33,44 +33,4 @@ export const authConfig = {
     newUser: "/register",
     error: "/login", // Error code passed in url string
   },
-  callbacks: {
-    authorized({ auth, request: { nextUrl } }) {
-      const isLoggedIn = !!auth?.user;
-      const isOnAdmin = nextUrl.pathname.startsWith("/admin");
-      const isOnDashboard = nextUrl.pathname.startsWith("/dashboard");
-      const isOnBooking = nextUrl.pathname.startsWith("/booking");
-      const isOnPayment = nextUrl.pathname.startsWith("/payment");
-      const isOnAuth =
-        nextUrl.pathname.startsWith("/login") ||
-        nextUrl.pathname.startsWith("/register");
-
-      // Admin routes require ADMIN role
-      if (isOnAdmin) {
-        if (isLoggedIn && auth?.user?.role === "ADMIN") return true;
-        return false;
-      }
-
-      // Protected routes require authentication
-      if (isOnDashboard || isOnBooking || isOnPayment) {
-        if (isLoggedIn) return true;
-        return false; // Redirect unauthenticated users to login page
-      }
-
-      // Redirect logged-in users away from auth pages
-      if (isLoggedIn && isOnAuth) {
-        return Response.redirect(new URL("/dashboard", nextUrl));
-      }
-
-      return true;
-    },
-    async session({ session, token }) {
-      if (token.sub && session.user) {
-        session.user.id = token.sub;
-      }
-      if (token.role && session.user) {
-        session.user.role = token.role as "USER" | "ADMIN";
-      }
-      return session;
-    },
-  },
 } satisfies NextAuthConfig;
