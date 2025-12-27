@@ -5,8 +5,14 @@ import { z } from "zod";
 
 const updateProfileSchema = z.object({
   name: z.string().min(1, "Name is required"),
-  nid: z.string().optional(),
-  contact: z.string().optional(),
+  nid: z
+    .string()
+    .optional()
+    .refine((val) => !val || /^\d{13}$/.test(val), "NID must be 13 digits"),
+  contact: z
+    .string()
+    .optional()
+    .refine((val) => !val || /^\d{11}$/.test(val), "Contact must be 11 digits"),
 });
 
 export async function PATCH(req: Request) {

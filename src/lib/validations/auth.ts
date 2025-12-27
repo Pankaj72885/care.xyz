@@ -1,10 +1,18 @@
 import { z } from "zod";
 
 export const registerSchema = z.object({
-  nid: z.string().min(1, "NID is required"),
+  nid: z
+    .string()
+    .min(13, "NID must be 13 digits")
+    .max(13, "NID must be 13 digits")
+    .regex(/^\d+$/, "NID must contain only numbers"),
   name: z.string().min(2, "Name is required"),
   email: z.string().email("Invalid email address"),
-  contact: z.string().min(1, "Contact is required"),
+  contact: z
+    .string()
+    .min(11, "Contact must be 11 digits")
+    .max(11, "Contact must be 11 digits")
+    .regex(/^\d+$/, "Contact must contain only numbers"),
   password: z
     .string()
     .min(6, "Password must be at least 6 characters")

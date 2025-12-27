@@ -26,8 +26,16 @@ import {
 import { Input } from "@/components/ui/input";
 
 const profileSchema = z.object({
-  nid: z.string().min(1, "NID is required"),
-  contact: z.string().min(1, "Contact is required"),
+  nid: z
+    .string()
+    .min(13, "NID must be 13 digits")
+    .max(13, "NID must be 13 digits")
+    .regex(/^\d+$/, "NID must contain only numbers"),
+  contact: z
+    .string()
+    .min(11, "Contact must be 11 digits")
+    .max(11, "Contact must be 11 digits")
+    .regex(/^\d+$/, "Contact must contain only numbers"),
 });
 
 type ProfileInput = z.infer<typeof profileSchema>;
