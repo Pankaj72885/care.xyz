@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import { SettingsForm } from "@/components/settings/settings-form";
 import {
   Card,
   CardContent,
@@ -6,12 +7,23 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
 export default async function SettingsPage() {
   const session = await auth();
 
-  if (!session?.user) {
+  if (!session?.user?.id) {
+    redirect("/login");
+  }
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: session.user.id,
+    },
+  });
+
+  if (!user) {
     redirect("/login");
   }
 
@@ -24,32 +36,15 @@ export default async function SettingsPage() {
         </p>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Profile Information</CardTitle>
-          <CardDescription>
-            Your account details and personal information.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid gap-2">
-            <label className="text-sm font-medium">Name</label>
-            <p className="text-muted-foreground text-sm">{session.user.name}</p>
-          </div>
-          <div className="grid gap-2">
-            <label className="text-sm font-medium">Email</label>
-            <p className="text-muted-foreground text-sm">
-              {session.user.email}
-            </p>
-          </div>
-          <div className="grid gap-2">
-            <label className="text-sm font-medium">Role</label>
-            <p className="text-muted-foreground text-sm capitalize">
-              {session.user.role}
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+      <SettingsForm
+        user={{
+          name: user.name,
+          email: user.email,
+          role: user.role,
+          nid: user.nid,
+          contact: user.contact,
+        }}
+      />
 
       <Card>
         <CardHeader>
