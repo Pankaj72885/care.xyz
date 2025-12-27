@@ -19,21 +19,7 @@ export const {
   session: { strategy: "jwt" },
   callbacks: {
     ...authConfig.callbacks,
-    async session({ session, token }) {
-      if (token.sub && session.user) {
-        session.user.id = token.sub;
-      }
-      if (token.role && session.user) {
-        session.user.role = token.role as "USER" | "ADMIN";
-      }
-      if (token.nid && session.user) {
-        session.user.nid = token.nid as string;
-      }
-      if (token.contact && session.user) {
-        session.user.contact = token.contact as string;
-      }
-      return session;
-    },
+
     async jwt({ token, user, account, trigger }) {
       // On sign in (when user object is present)
       if (user) {
