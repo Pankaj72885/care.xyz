@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CheckCircle, Heart, Shield, Users } from "lucide-react";
+import { CheckCircle, Shield, Users } from "lucide-react";
+import Image from "next/image";
 
 export default function AboutPage() {
   return (
@@ -33,16 +34,13 @@ export default function AboutPage() {
             </p>
           </div>
           <div className="bg-muted/50 relative flex aspect-video items-center justify-center overflow-hidden rounded-xl border">
-            <Heart className="text-primary/20 h-24 w-24 animate-pulse" />
-            {/* <Image 
-                 src="/placeholder-about.jpg" 
-                 alt="Caregivers helping" 
-                 fill 
-                 className="object-cover"
-               /> */}
-            <span className="text-muted-foreground absolute text-sm">
-              Image Placeholder
-            </span>
+            <Image
+              src="/about-hero.jpg"
+              alt="Compassionate caregiver helping elderly person"
+              fill
+              className="object-cover"
+              priority
+            />
           </div>
         </div>
 
