@@ -19,25 +19,22 @@ export const {
   session: { strategy: "jwt" },
   callbacks: {
     ...authConfig.callbacks,
-    async jwt({ token, user, account, trigger }) {
-      // Call the original JWT callback first
-      if (authConfig.callbacks?.jwt) {
-        token = await authConfig.callbacks.jwt({
-          token,
-          user,
-          account,
-          trigger,
-        } as any);
+    async jwt({ token, user, account }) {
+      // On sign in (when user object is present)
+      if (user) {
+        token.role = user.role || "USER";
       }
 
       // For OAuth users on first sign in, fetch role from database
-      if (account && token.sub) {
+      if (account && !token.role && token.sub) {
         const dbUser = await prisma.user.findUnique({
           where: { id: token.sub },
           select: { role: true },
         });
         if (dbUser) {
           token.role = dbUser.role;
+        } else {
+          token.role = "USER"; // Default role
         }
       }
 

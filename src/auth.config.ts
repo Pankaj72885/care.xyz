@@ -2,7 +2,6 @@ import type { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 
-import { prisma } from "@/lib/prisma";
 import { loginSchema } from "@/lib/validations/auth";
 
 export const authConfig = {
@@ -72,24 +71,6 @@ export const authConfig = {
         session.user.role = token.role as "USER" | "ADMIN";
       }
       return session;
-    },
-    async jwt({ token, user, account }) {
-      if (user) {
-        token.role = (user as any).role;
-      }
-
-      // For OAuth users, fetch role from database if not present
-      if (account && !token.role && token.sub) {
-        const dbUser = await prisma.user.findUnique({
-          where: { id: token.sub },
-          select: { role: true },
-        });
-        if (dbUser) {
-          token.role = dbUser.role;
-        }
-      }
-
-      return token;
     },
   },
 } satisfies NextAuthConfig;
