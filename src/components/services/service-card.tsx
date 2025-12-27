@@ -13,7 +13,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 interface ServiceCardProps {
-  service: Service;
+  service: Service & { imageUrl?: string | null };
 }
 
 export function ServiceCard({ service }: ServiceCardProps) {

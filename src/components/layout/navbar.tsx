@@ -52,6 +52,11 @@ export function Navbar({ user }: NavbarProps) {
       label: "About",
       active: pathname === "/about",
     },
+    {
+      href: "/contact",
+      label: "Contact",
+      active: pathname === "/contact",
+    },
     ...(!isAdmin
       ? [
           {
