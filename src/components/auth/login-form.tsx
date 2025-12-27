@@ -5,6 +5,7 @@ import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -48,6 +49,7 @@ export function LoginForm() {
         });
 
         if (result?.error) {
+          toast.error("Invalid email or password");
           form.setError("root", { message: "Invalid email or password" });
           return;
         }
@@ -56,6 +58,8 @@ export function LoginForm() {
         const response = await fetch("/api/auth/session");
         const session = await response.json();
 
+        toast.success("Login successful! Redirecting...");
+
         // Redirect based on role
         if (session?.user?.role === "ADMIN") {
           window.location.href = "/admin";
@@ -63,6 +67,7 @@ export function LoginForm() {
           window.location.href = "/dashboard";
         }
       } catch {
+        toast.error("Something went wrong. Please try again.");
         form.setError("root", {
           message: "Something went wrong. Please try again.",
         });

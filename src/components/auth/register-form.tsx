@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 import { registerUser } from "@/app/actions/auth";
 import { Button } from "@/components/ui/button";
@@ -45,20 +46,17 @@ export function RegisterForm() {
   });
 
   function onSubmit(data: RegisterInput) {
-    console.log("Registration form submitted with data:", data);
     startTransition(async () => {
       try {
-        console.log("Calling registerUser...");
         const result = await registerUser(data);
-        console.log("Registration result:", result);
 
         if (result.error) {
-          console.error("Registration error:", result.error);
+          toast.error(result.error);
           form.setError("root", { message: result.error });
           return;
         }
 
-        console.log("Registration successful, logging in...");
+        toast.success("Registration successful! Logging you in...");
         // Auto-login the user after registration
         const loginResult = await signIn("credentials", {
           email: data.email,
@@ -67,16 +65,16 @@ export function RegisterForm() {
         });
 
         if (loginResult?.error) {
-          console.error("Auto-login failed:", loginResult.error);
+          toast.info("Please login with your credentials");
           // Registration succeeded but login failed, redirect to login page
           router.push("/login?registered=true");
           return;
         }
 
-        console.log("Auto-login successful, redirecting to dashboard...");
+        toast.success("Welcome! Redirecting to dashboard...");
         router.push("/dashboard");
-      } catch (error) {
-        console.error("Registration exception:", error);
+      } catch {
+        toast.error("Something went wrong. Please try again.");
         form.setError("root", {
           message: "Something went wrong. Please try again.",
         });
@@ -169,17 +167,7 @@ export function RegisterForm() {
                 {form.formState.errors.root.message}
               </p>
             )}
-            <Button
-              className="w-full"
-              type="submit"
-              disabled={isPending}
-              onClick={() => {
-                console.log("Create account button clicked");
-                console.log("Form values:", form.getValues());
-                console.log("Form errors:", form.formState.errors);
-                console.log("Form is valid:", form.formState.isValid);
-              }}
-            >
+            <Button className="w-full" type="submit" disabled={isPending}>
               {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Create account
             </Button>
