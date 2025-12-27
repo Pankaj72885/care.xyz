@@ -17,6 +17,33 @@ export const {
   ...authConfig,
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
+  callbacks: {
+    ...authConfig.callbacks,
+    async jwt({ token, user, account, trigger }) {
+      // Call the original JWT callback first
+      if (authConfig.callbacks?.jwt) {
+        token = await authConfig.callbacks.jwt({
+          token,
+          user,
+          account,
+          trigger,
+        } as any);
+      }
+
+      // For OAuth users on first sign in, fetch role from database
+      if (account && token.sub) {
+        const dbUser = await prisma.user.findUnique({
+          where: { id: token.sub },
+          select: { role: true },
+        });
+        if (dbUser) {
+          token.role = dbUser.role;
+        }
+      }
+
+      return token;
+    },
+  },
   providers: [
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID,

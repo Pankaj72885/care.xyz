@@ -2,6 +2,7 @@ import type { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 
+import { prisma } from "@/lib/prisma";
 import { loginSchema } from "@/lib/validations/auth";
 
 export const authConfig = {
@@ -36,17 +37,31 @@ export const authConfig = {
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
+      const isOnAdmin = nextUrl.pathname.startsWith("/admin");
       const isOnDashboard = nextUrl.pathname.startsWith("/dashboard");
+      const isOnBooking = nextUrl.pathname.startsWith("/booking");
+      const isOnPayment = nextUrl.pathname.startsWith("/payment");
       const isOnAuth =
         nextUrl.pathname.startsWith("/login") ||
         nextUrl.pathname.startsWith("/register");
 
-      if (isOnDashboard) {
+      // Admin routes require ADMIN role
+      if (isOnAdmin) {
+        if (isLoggedIn && auth?.user?.role === "ADMIN") return true;
+        return false;
+      }
+
+      // Protected routes require authentication
+      if (isOnDashboard || isOnBooking || isOnPayment) {
         if (isLoggedIn) return true;
         return false; // Redirect unauthenticated users to login page
-      } else if (isLoggedIn && isOnAuth) {
+      }
+
+      // Redirect logged-in users away from auth pages
+      if (isLoggedIn && isOnAuth) {
         return Response.redirect(new URL("/dashboard", nextUrl));
       }
+
       return true;
     },
     async session({ session, token }) {
@@ -58,10 +73,22 @@ export const authConfig = {
       }
       return session;
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user, account }) {
       if (user) {
         token.role = (user as any).role;
       }
+
+      // For OAuth users, fetch role from database if not present
+      if (account && !token.role && token.sub) {
+        const dbUser = await prisma.user.findUnique({
+          where: { id: token.sub },
+          select: { role: true },
+        });
+        if (dbUser) {
+          token.role = dbUser.role;
+        }
+      }
+
       return token;
     },
   },
