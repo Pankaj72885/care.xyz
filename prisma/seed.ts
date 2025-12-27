@@ -67,7 +67,7 @@ async function main() {
   for (const service of services) {
     const activeService = await prisma.service.upsert({
       where: { slug: service.slug },
-      update: {},
+      update: service, // Update existing records with new data
       create: service,
     });
     console.log(`Created service: ${activeService.title}`);
