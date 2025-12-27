@@ -1,7 +1,10 @@
+"use client";
+
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { CalendarDays, LayoutDashboard, Settings } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
   items: {
@@ -16,6 +19,8 @@ export function DashboardSidebar({
   items,
   ...props
 }: SidebarNavProps) {
+  const pathname = usePathname();
+
   return (
     <nav
       className={cn(
@@ -30,8 +35,10 @@ export function DashboardSidebar({
           href={item.href}
           className={cn(
             buttonVariants({ variant: "ghost" }),
-            "justify-start hover:bg-transparent hover:underline"
-            // Add active state styles if needed, but simplistic for now
+            pathname === item.href
+              ? "bg-muted hover:bg-muted"
+              : "hover:bg-transparent hover:underline",
+            "justify-start"
           )}
         >
           <item.icon className="mr-2 h-4 w-4" />

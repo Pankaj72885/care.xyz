@@ -1,6 +1,8 @@
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = process.env.RESEND_API_KEY
+  ? new Resend(process.env.RESEND_API_KEY)
+  : null;
 
 interface InvoiceData {
   userEmail: string;
@@ -15,7 +17,7 @@ interface InvoiceData {
 }
 
 export async function sendBookingInvoice(data: InvoiceData) {
-  if (!process.env.RESEND_API_KEY) {
+  if (!process.env.RESEND_API_KEY || !resend) {
     console.warn("RESEND_API_KEY is missing. Skipping email sending.");
     return;
   }

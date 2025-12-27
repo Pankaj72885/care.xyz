@@ -49,7 +49,7 @@ export function BookingForm({ service }: BookingFormProps) {
     resolver: zodResolver(bookingCreateSchema),
     defaultValues: {
       serviceId: service.id,
-      durationUnit: "HOUR",
+      durationUnit: "HOUR" as const,
       durationValue: 2,
       division: "",
       district: "",
@@ -190,7 +190,15 @@ export function BookingForm({ service }: BookingFormProps) {
                             How many {watchData.durationUnit.toLowerCase()}s?
                           </FormLabel>
                           <FormControl>
-                            <Input type="number" {...field} min={1} />
+                            <Input
+                              type="number"
+                              {...field}
+                              onChange={(e) =>
+                                field.onChange(parseInt(e.target.value) || 0)
+                              }
+                              value={field.value}
+                              min={1}
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>

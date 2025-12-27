@@ -10,6 +10,10 @@ export async function createPaymentIntent(bookingId: string) {
     throw new Error("Unauthorized");
   }
 
+  if (!stripe) {
+    throw new Error("Payment system not configured");
+  }
+
   const booking = await prisma.booking.findUnique({
     where: { id: bookingId },
   });

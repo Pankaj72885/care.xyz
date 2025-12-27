@@ -5,7 +5,7 @@ export const durationUnitEnum = z.enum(["HOUR", "DAY"]);
 export const bookingCreateSchema = z.object({
   serviceId: z.string().min(1, "Service ID is required"),
   durationUnit: durationUnitEnum,
-  durationValue: z.coerce // Use coerce because input type="number" returns string usually unless properly handled
+  durationValue: z
     .number()
     .int("Duration must be an integer")
     .min(1, "Duration must be at least 1")
