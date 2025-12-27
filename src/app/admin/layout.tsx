@@ -1,5 +1,12 @@
 import { auth } from "@/auth";
-import { CreditCard, Home, Layers, LayoutDashboard } from "lucide-react";
+import {
+  BarChart3,
+  CreditCard,
+  Home,
+  Layers,
+  LayoutDashboard,
+  Users,
+} from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -30,6 +37,20 @@ export default async function AdminLayout({
             Overview
           </Link>
           <Link
+            href="/admin/services"
+            className="flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-slate-200 dark:hover:bg-slate-800"
+          >
+            <Layers className="h-4 w-4" />
+            Services
+          </Link>
+          <Link
+            href="/admin/users"
+            className="flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-slate-200 dark:hover:bg-slate-800"
+          >
+            <Users className="h-4 w-4" />
+            Users
+          </Link>
+          <Link
             href="/admin/payments"
             className="flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-slate-200 dark:hover:bg-slate-800"
           >
@@ -37,11 +58,11 @@ export default async function AdminLayout({
             Payments
           </Link>
           <Link
-            href="/admin/services"
+            href="/admin/reports"
             className="flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-slate-200 dark:hover:bg-slate-800"
           >
-            <Layers className="h-4 w-4" />
-            Services
+            <BarChart3 className="h-4 w-4" />
+            Reports
           </Link>
           <div className="mt-4 border-t border-slate-200 pt-4 dark:border-slate-800">
             <Link

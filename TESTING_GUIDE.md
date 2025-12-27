@@ -1,4 +1,3 @@
-
 # Testing Guide for Care.xyz
 
 ## Current Status
@@ -22,9 +21,43 @@ STRIPE_SECRET_KEY=...
 NEXT_PUBLIC_STRIPE_PUBLIC_KEY=... (added)
 ```
 
+## Admin Credentials
+
+**Default Admin Account:**
+
+- **Email**: admin@care.xyz
+- **Password**: Admin@123456
+- **Role**: ADMIN
+
+> ⚠️ **Important**: Change the password after first login for security!
+
+To create the admin user, run:
+
+```bash
+bun scripts/create-admin.ts
+```
+
+To find existing admin users:
+
+```bash
+bun scripts/find-admin.ts
+```
+
 ## How to Test Login
 
-### 1. Create a Test User
+### 1. Admin Login
+
+**With Admin Credentials:**
+
+1. Go to http://localhost:3000/login
+2. Enter:
+   - Email: admin@care.xyz
+   - Password: Admin@123456
+3. Click "Sign in"
+4. Should redirect to http://localhost:3000/dashboard
+5. Access admin panel at http://localhost:3000/admin
+
+### 2. Create a Test User
 
 First, you need to create a user in the database. You can do this by:
 

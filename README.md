@@ -149,7 +149,16 @@ src/
 
    # Seed the database
    bun prisma/seed.ts
+
+   # Create admin user
+   bun scripts/create-admin.ts
    ```
+
+   **Default Admin Credentials:**
+   - Email: `admin@care.xyz`
+   - Password: `Admin@123456`
+
+   > ⚠️ Change the password after first login!
 
 5. **Run the development server**
 
