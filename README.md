@@ -3,7 +3,7 @@
 [![Live Site](https://img.shields.io/badge/Live-Site-green?style=for-the-badge&logo=vercel)](https://carexyz-production.up.railway.app/)
 [![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-black?style=for-the-badge&logo=github)](https://github.com/Pankaj72885/care.xyz)
 
-![Next.js](https://img.shields.io/badge/Next.js-15-black)
+![Next.js](https://img.shields.io/badge/Next.js-16-black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-3.8-sky)
 ![Prisma](https://img.shields.io/badge/Prisma-ORM-2D3748)
@@ -14,7 +14,7 @@
 
 **Care.xyz** is a comprehensive full-stack web application that enables families in Bangladesh to easily book trusted caregiving services for babies, elderly individuals, and people recovering from illness. The platform simplifies discovery, booking, payment, and tracking with a modern, accessible interface, robust authentication, and clear status visibility.
 
-This production-ready application demonstrates modern web development practices using **Next.js 15 (App Router)**, **Server Actions**, **PostgreSQL**, and **Stripe** payments.
+This production-ready application demonstrates modern web development practices using **Next.js 16 (App Router)**, **Server Actions**, **PostgreSQL**, and **Stripe** payments.
 
 ---
 
