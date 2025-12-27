@@ -45,17 +45,23 @@ export function RegisterForm() {
   });
 
   function onSubmit(data: RegisterInput) {
+    console.log("Registration form submitted with data:", data);
     startTransition(async () => {
       try {
+        console.log("Calling registerUser...");
         const result = await registerUser(data);
+        console.log("Registration result:", result);
 
         if (result.error) {
+          console.error("Registration error:", result.error);
           form.setError("root", { message: result.error });
           return;
         }
 
+        console.log("Registration successful, redirecting to login...");
         router.push("/login?registered=true");
       } catch (error) {
+        console.error("Registration exception:", error);
         form.setError("root", {
           message: "Something went wrong. Please try again.",
         });

@@ -13,11 +13,7 @@ export const registerSchema = z.object({
     .min(6, "Contact must be valid")
     .max(20, "Contact too long")
     .optional(),
-  password: z
-    .string()
-    .min(6, "Password must be at least 6 characters")
-    .regex(/[A-Z]/, "Password must include at least one uppercase letter")
-    .regex(/[a-z]/, "Password must include at least one lowercase letter"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
 export type RegisterInput = z.infer<typeof registerSchema>;
