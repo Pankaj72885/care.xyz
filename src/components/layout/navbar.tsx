@@ -36,6 +36,11 @@ export function Navbar({ user }: NavbarProps) {
       active: pathname.startsWith("/services"),
     },
     {
+      href: "/about",
+      label: "About",
+      active: pathname === "/about",
+    },
+    {
       href: isAdmin ? "/admin" : "/dashboard",
       label: isAdmin ? "Admin" : "Dashboard",
       active: isAdmin
