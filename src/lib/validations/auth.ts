@@ -5,7 +5,8 @@ export const registerSchema = z.object({
     .string()
     .min(10, "NID must be at least 10 characters")
     .max(20, "NID is too long")
-    .optional(),
+    .optional()
+    .or(z.literal("")),
   name: z.string().min(2, "Name is required"),
   email: z.string().email("Invalid email address"),
   contact: z

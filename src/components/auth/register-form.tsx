@@ -145,12 +145,12 @@ export function RegisterForm() {
               className="w-full"
               type="submit"
               disabled={isPending}
-              onClick={() =>
-                console.log(
-                  "Create account button clicked",
-                  form.formState.errors
-                )
-              }
+              onClick={() => {
+                console.log("Create account button clicked");
+                console.log("Form values:", form.getValues());
+                console.log("Form errors:", form.formState.errors);
+                console.log("Form is valid:", form.formState.isValid);
+              }}
             >
               {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Create account
