@@ -18,14 +18,17 @@
    - Go to: http://localhost:3000/login
    - Enter the admin credentials above
    - Click "Sign in"
+   - **You will be automatically redirected to `/admin`** (not `/dashboard`)
 
 2. **Access Admin Dashboard**
-   - After login, navigate to: http://localhost:3000/admin
+   - After login, you'll be at: http://localhost:3000/admin
    - You should see the admin panel with:
-     - Dashboard overview
-     - Booking management
-     - Payment management
-     - Service management
+     - Dashboard overview with stats
+     - Quick navigation cards
+     - Recent bookings list
+     - Sidebar with all admin sections
+
+**Note**: Regular users are redirected to `/dashboard`, but admin users automatically go to `/admin` after login.
 
 ---
 
