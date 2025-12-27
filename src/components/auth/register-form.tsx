@@ -183,7 +183,7 @@ export function RegisterForm() {
         <Button
           variant="outline"
           className="w-full"
-          onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
+          onClick={() => signIn("google", { callbackUrl: "/complete-profile" })}
           type="button"
         >
           <svg

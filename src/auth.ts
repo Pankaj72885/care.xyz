@@ -26,24 +26,46 @@ export const {
       if (token.role && session.user) {
         session.user.role = token.role as "USER" | "ADMIN";
       }
+      if (token.nid && session.user) {
+        session.user.nid = token.nid as string;
+      }
+      if (token.contact && session.user) {
+        session.user.contact = token.contact as string;
+      }
       return session;
     },
-    async jwt({ token, user, account }) {
+    async jwt({ token, user, account, trigger }) {
       // On sign in (when user object is present)
       if (user) {
         token.role = user.role || "USER";
+        token.nid = user.nid;
+        token.contact = user.contact;
       }
 
-      // For OAuth users on first sign in, fetch role from database
-      if (account && !token.role && token.sub) {
+      // For OAuth users on first sign in, fetch user data from database
+      if (account && token.sub) {
         const dbUser = await prisma.user.findUnique({
           where: { id: token.sub },
-          select: { role: true },
+          select: { role: true, nid: true, contact: true },
         });
         if (dbUser) {
           token.role = dbUser.role;
+          token.nid = dbUser.nid;
+          token.contact = dbUser.contact;
         } else {
-          token.role = "USER"; // Default role
+          token.role = "USER";
+        }
+      }
+
+      // Refresh token data on update trigger
+      if (trigger === "update" && token.sub) {
+        const dbUser = await prisma.user.findUnique({
+          where: { id: token.sub },
+          select: { role: true, nid: true, contact: true },
+        });
+        if (dbUser) {
+          token.nid = dbUser.nid;
+          token.contact = dbUser.contact;
         }
       }
 
