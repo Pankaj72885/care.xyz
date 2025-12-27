@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 
@@ -29,7 +28,6 @@ import { LoginInput, loginSchema } from "@/lib/validations/auth";
 import { signIn } from "next-auth/react";
 
 export function LoginForm() {
-  const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<LoginInput>({
@@ -54,8 +52,8 @@ export function LoginForm() {
           return;
         }
 
-        router.push("/dashboard"); // Redirect to dashboard after login
-        router.refresh();
+        // Use window.location for hard redirect to ensure session is loaded
+        window.location.href = "/dashboard";
       } catch (error) {
         form.setError("root", {
           message: "Something went wrong. Please try again.",
