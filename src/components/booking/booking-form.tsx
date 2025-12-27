@@ -90,7 +90,7 @@ export function BookingForm({ service }: BookingFormProps) {
     try {
       const result = await createBooking({ ...data, totalCost });
       if (result.success && result.bookingId) {
-        router.push(`/booking/${result.bookingId}/confirmation`); // Or payment
+        router.push(`/payment/${result.bookingId}`);
       } else {
         form.setError("root", {
           message: result.error || "Failed to create booking",
