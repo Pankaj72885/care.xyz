@@ -26,26 +26,40 @@ export async function POST(req: Request) {
     const bookingId = session.metadata.bookingId;
 
     if (bookingId) {
-      await prisma.booking.update({
+      const booking = await prisma.booking.update({
         where: { id: bookingId },
         data: {
           status: "CONFIRMED",
           payment: {
             create: {
-              amount: session.amount / 100, // Convert back to unit (or keep as cents if schema expects minor units? Schema says Int, "minor unit (e.g. BDT in smallest unit)".
-              // Wait, in schema I wrote "minor unit".
-              // In payment intent I sent amount in cents/poisha.
-              // So I should save it as is?
-              // Schema: "amount Int // minor unit"
-              // OK, so I save session.amount.
               amount: session.amount,
               currency: session.currency,
               stripePaymentIntentId: session.id,
               status: session.status,
+              receiptUrl: (session as any).charges?.data?.[0]?.receipt_url,
             },
           },
         },
+        include: {
+          user: true,
+          service: true,
+        },
       });
+
+      // Send Invoice Email
+      await import("@/lib/email").then(({ sendBookingInvoice }) =>
+        sendBookingInvoice({
+          userEmail: booking.user.email,
+          userName: booking.user.name,
+          bookingId: booking.id,
+          serviceTitle: booking.service.title,
+          totalCost: booking.totalCost,
+          durationValue: booking.durationValue,
+          durationUnit: booking.durationUnit,
+          receiptUrl: (session as any).charges?.data?.[0]?.receipt_url,
+          bookingDate: booking.createdAt,
+        })
+      );
     }
   }
 
