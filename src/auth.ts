@@ -23,23 +23,22 @@ export const {
     async jwt({ token, user, account, trigger }) {
       // On sign in (when user object is present)
       if (user) {
-        token.role = user.role || "USER";
+        token.role = user.role;
         token.nid = user.nid;
         token.contact = user.contact;
       }
 
-      // For OAuth users on first sign in, fetch user data from database
-      if (account && token.sub) {
+      // If token has no role (or on update), fetch from DB to ensure it's up to date
+      if (!token.role && token.sub) {
         const dbUser = await prisma.user.findUnique({
           where: { id: token.sub },
           select: { role: true, nid: true, contact: true },
         });
+
         if (dbUser) {
           token.role = dbUser.role;
           token.nid = dbUser.nid;
           token.contact = dbUser.contact;
-        } else {
-          token.role = "USER";
         }
       }
 
@@ -50,6 +49,7 @@ export const {
           select: { role: true, nid: true, contact: true },
         });
         if (dbUser) {
+          token.role = dbUser.role;
           token.nid = dbUser.nid;
           token.contact = dbUser.contact;
         }

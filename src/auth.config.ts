@@ -29,6 +29,7 @@ export const authConfig = {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
       const isAdmin = auth?.user?.role === "ADMIN";
+
       const isOnAdmin = nextUrl.pathname.startsWith("/admin");
       const isOnDashboard = nextUrl.pathname.startsWith("/dashboard");
       const isOnBooking = nextUrl.pathname.startsWith("/booking");
@@ -44,6 +45,7 @@ export const authConfig = {
       }
 
       // Protected routes require authentication
+      // Admins should also be able to access dashboard routes (e.g. settings)
       if (isOnDashboard || isOnBooking || isOnPayment) {
         if (isLoggedIn) return true;
         return false; // Redirect unauthenticated users to login page
@@ -51,12 +53,24 @@ export const authConfig = {
 
       // Redirect logged-in users away from auth pages based on role
       if (isLoggedIn && isOnAuth) {
-        // Admins go to /admin, regular users go to /dashboard
+        // Admins go to /admin by default when accessing auth pages, but can go to dashboard if they navigate there
         const redirectUrl = isAdmin ? "/admin" : "/dashboard";
         return Response.redirect(new URL(redirectUrl, nextUrl));
       }
 
       return true;
+    },
+    async session({ session, token }) {
+      if (token.contact && session.user) {
+        session.user.contact = token.contact as string;
+      }
+
+      // Failsafe: Ensure the seed admin always has the ADMIN role
+      if (session.user?.email === "admin@care.xyz") {
+        session.user.role = "ADMIN";
+      }
+
+      return session;
     },
   },
 } satisfies NextAuthConfig;

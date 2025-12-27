@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
@@ -32,6 +33,7 @@ const services = [
 async function main() {
   console.log("🌱 Seeding database...");
 
+  // Create Services
   for (const service of services) {
     const activeService = await prisma.service.upsert({
       where: { slug: service.slug },
@@ -41,6 +43,27 @@ async function main() {
     console.log(`Created service: ${activeService.title}`);
   }
 
+  // Create Admin User
+  const adminPassword = await bcrypt.hash("Admin@123456", 10);
+  const adminValue = {
+    email: "admin@care.xyz",
+    name: "System Admin",
+    passwordHash: adminPassword,
+    role: "ADMIN" as const,
+    contact: "01700000000",
+    nid: "1234567890",
+  };
+
+  const admin = await prisma.user.upsert({
+    where: { email: "admin@care.xyz" },
+    update: {
+      passwordHash: adminPassword,
+      role: "ADMIN", // Ensure role is enforced
+    },
+    create: adminValue,
+  });
+
+  console.log(`Created admin user: ${admin.email}`);
   console.log("✅ Seeding completed.");
 }
 
