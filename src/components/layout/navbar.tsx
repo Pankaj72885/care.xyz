@@ -22,6 +22,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import { Menu } from "lucide-react";
 import { User } from "next-auth";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
@@ -87,7 +88,7 @@ export function Navbar({ user }: NavbarProps) {
             Care.xyz
           </span>
         </Link>
-        <nav className="flex items-center space-x-6 text-sm font-medium">
+        <nav className="hidden items-center space-x-6 text-sm font-medium md:flex">
           {routes.map((route) => {
             if (route.protected && !user) return null;
             return (
@@ -109,7 +110,7 @@ export function Navbar({ user }: NavbarProps) {
           {user ? (
             <UserNav user={user} />
           ) : (
-            <div className="flex items-center space-x-2">
+            <div className="hidden items-center space-x-2 md:flex">
               <Button variant="ghost" asChild>
                 <Link href="/login">Login</Link>
               </Button>
@@ -118,6 +119,46 @@ export function Navbar({ user }: NavbarProps) {
               </Button>
             </div>
           )}
+
+          <div className="md:hidden">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="icon">
+                  <Menu className="h-5 w-5" />
+                  <span className="sr-only">Toggle menu</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {routes.map((route) => {
+                  if (route.protected && !user) return null;
+                  return (
+                    <DropdownMenuItem key={route.href} asChild>
+                      <Link
+                        href={route.href}
+                        className={cn(
+                          "w-full",
+                          route.active ? "font-bold" : ""
+                        )}
+                      >
+                        {route.label}
+                      </Link>
+                    </DropdownMenuItem>
+                  );
+                })}
+                {!user && (
+                  <>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link href="/login">Login</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/register">Sign Up</Link>
+                    </DropdownMenuItem>
+                  </>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
       </div>
     </header>
