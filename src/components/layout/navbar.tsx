@@ -41,13 +41,21 @@ export function Navbar({ user }: NavbarProps) {
       active: pathname === "/about",
     },
     {
-      href: isAdmin ? "/admin" : "/dashboard",
-      label: isAdmin ? "Admin" : "Dashboard",
-      active: isAdmin
-        ? pathname.startsWith("/admin")
-        : pathname.startsWith("/dashboard"),
+      href: "/dashboard",
+      label: "Dashboard",
+      active: pathname.startsWith("/dashboard"),
       protected: true,
     },
+    ...(isAdmin
+      ? [
+          {
+            href: "/admin",
+            label: "Admin Panel",
+            active: pathname.startsWith("/admin"),
+            protected: true,
+          },
+        ]
+      : []),
   ];
 
   return (
@@ -97,8 +105,6 @@ export function Navbar({ user }: NavbarProps) {
 
 function UserNav({ user }: { user: User }) {
   const isAdmin = user?.role === "ADMIN";
-  const dashboardHref = isAdmin ? "/admin" : "/dashboard";
-  const dashboardLabel = isAdmin ? "Admin Panel" : "Dashboard";
 
   return (
     <DropdownMenu>
@@ -125,14 +131,17 @@ function UserNav({ user }: { user: User }) {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem asChild>
-          <Link href={dashboardHref}>{dashboardLabel}</Link>
-        </DropdownMenuItem>
-        {!isAdmin && (
+        {isAdmin && (
           <DropdownMenuItem asChild>
-            <Link href="/dashboard/settings">Settings</Link>
+            <Link href="/admin">Admin Panel</Link>
           </DropdownMenuItem>
         )}
+        <DropdownMenuItem asChild>
+          <Link href="/dashboard">Dashboard</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href="/dashboard/settings">Settings</Link>
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           {/* Note: In client components we usually use signOut from next-auth/react but we can also use a link to an api route or server action foundation */}
