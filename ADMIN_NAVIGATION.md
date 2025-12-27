@@ -2,11 +2,30 @@
 
 ## 🎯 How to Navigate Admin Pages
 
-There are **TWO ways** to navigate between admin pages:
+There are **THREE ways** to navigate between admin pages:
 
 ---
 
-## 1️⃣ **Sidebar Navigation** (Always Available)
+## 1️⃣ **Global Navbar** (Top of Screen)
+
+The main navigation bar dynamically adapts to your role:
+
+**For Admins:**
+
+- **"Admin"** link appears instead of "Dashboard"
+- Points to `/admin`
+- User Dropdown shows "Admin Panel" link
+- "Admin" badge appears in dropdown
+
+**For Regular Users:**
+
+- **"Dashboard"** link appears
+- Points to `/dashboard`
+- User Dropdown shows "Dashboard" and "Settings" links
+
+---
+
+## 2️⃣ **Sidebar Navigation** (Admin Pages Only)
 
 The admin sidebar is visible on **all admin pages** and provides quick access to:
 

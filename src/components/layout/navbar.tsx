@@ -46,10 +46,10 @@ export function Navbar({ user }: NavbarProps) {
   ];
 
   return (
-    <header className="bg-background/95 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 w-full border-b backdrop-blur">
+    <header className="bg-background/95 supports-backdrop-filter:bg-background/60 sticky top-0 z-50 w-full border-b backdrop-blur">
       <div className="container mx-auto flex h-16 items-center px-4">
         <Link href="/" className="mr-8 flex items-center space-x-2">
-          <span className="from-primary bg-gradient-to-r to-blue-600 bg-clip-text text-xl font-bold text-transparent">
+          <span className="from-primary bg-linear-to-r to-blue-600 bg-clip-text text-xl font-bold text-transparent">
             Care.xyz
           </span>
         </Link>
@@ -108,12 +108,12 @@ function UserNav({ user }: { user: User }) {
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{user.name}</p>
+            <p className="text-sm leading-none font-medium">{user.name}</p>
             <p className="text-muted-foreground text-xs leading-none">
               {user.email}
             </p>
             {isAdmin && (
-              <p className="text-primary text-xs font-medium leading-none">
+              <p className="text-primary text-xs leading-none font-medium">
                 Admin
               </p>
             )}
