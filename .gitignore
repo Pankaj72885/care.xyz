@@ -41,3 +41,8 @@ yarn-error.log*
 next-env.d.ts
 prompt.txt
 !.env.example
+
+
+projectPaper.txt
+executionPlan.txt
+/src/generated/prisma

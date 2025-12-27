@@ -1,0 +1,85 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
+
+enum DurationUnit {
+  HOUR
+  DAY
+}
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  passwordHash  String?  // null if using Google only
+  googleId      String?  @unique
+  name          String
+  nid           String?  @unique
+  contact       String?
+  role          Role     @default(USER)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  bookings      Booking[]
+}
+
+model Service {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  description String
+  category    String   // "baby" | "elderly" | "sick" (can convert to enum later)
+  baseRate    Int      // minor unit (e.g., BDT in smallest unit or raw integer)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  bookings    Booking[]
+}
+
+model Booking {
+  id            String        @id @default(cuid())
+  userId        String
+  serviceId     String
+  durationUnit  DurationUnit
+  durationValue Int
+  division      String
+  district      String
+  city          String
+  area          String
+  address       String
+  totalCost     Int
+  status        BookingStatus @default(PENDING)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  service Service @relation(fields: [serviceId], references: [id], onDelete: Restrict)
+  payment Payment?
+}
+
+model Payment {
+  id                     String      @id @default(cuid())
+  bookingId              String      @unique
+  amount                 Int
+  currency               String      // e.g., "BDT"
+  stripePaymentIntentId  String      @unique
+  status                 String      // "succeeded" | "processing" | "requires_action" | ...
+  receiptUrl             String?
+  createdAt              DateTime    @default(now())
+
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+}
