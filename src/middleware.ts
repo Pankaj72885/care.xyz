@@ -3,7 +3,7 @@ import NextAuth from "next-auth";
 
 const { auth } = NextAuth(authConfig);
 
-export default auth;
+export const middleware = auth;
 
 export const config = {
   // https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher
