@@ -22,6 +22,7 @@ interface NavbarProps {
 
 export function Navbar({ user }: NavbarProps) {
   const pathname = usePathname();
+  const isAdmin = user?.role === "ADMIN";
 
   const routes = [
     {
@@ -35,9 +36,11 @@ export function Navbar({ user }: NavbarProps) {
       active: pathname.startsWith("/services"),
     },
     {
-      href: "/dashboard",
-      label: "Dashboard",
-      active: pathname.startsWith("/dashboard"),
+      href: isAdmin ? "/admin" : "/dashboard",
+      label: isAdmin ? "Admin" : "Dashboard",
+      active: isAdmin
+        ? pathname.startsWith("/admin")
+        : pathname.startsWith("/dashboard"),
       protected: true,
     },
   ];
@@ -88,6 +91,10 @@ export function Navbar({ user }: NavbarProps) {
 }
 
 function UserNav({ user }: { user: User }) {
+  const isAdmin = user?.role === "ADMIN";
+  const dashboardHref = isAdmin ? "/admin" : "/dashboard";
+  const dashboardLabel = isAdmin ? "Admin Panel" : "Dashboard";
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -101,19 +108,26 @@ function UserNav({ user }: { user: User }) {
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm leading-none font-medium">{user.name}</p>
+            <p className="text-sm font-medium leading-none">{user.name}</p>
             <p className="text-muted-foreground text-xs leading-none">
               {user.email}
             </p>
+            {isAdmin && (
+              <p className="text-primary text-xs font-medium leading-none">
+                Admin
+              </p>
+            )}
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link href="/dashboard">Dashboard</Link>
+          <Link href={dashboardHref}>{dashboardLabel}</Link>
         </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link href="/dashboard/settings">Settings</Link>
-        </DropdownMenuItem>
+        {!isAdmin && (
+          <DropdownMenuItem asChild>
+            <Link href="/dashboard/settings">Settings</Link>
+          </DropdownMenuItem>
+        )}
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           {/* Note: In client components we usually use signOut from next-auth/react but we can also use a link to an api route or server action foundation */}
