@@ -40,12 +40,16 @@ export function Navbar({ user }: NavbarProps) {
       label: "About",
       active: pathname === "/about",
     },
-    {
-      href: "/dashboard",
-      label: "Dashboard",
-      active: pathname.startsWith("/dashboard"),
-      protected: true,
-    },
+    ...(!isAdmin
+      ? [
+          {
+            href: "/dashboard",
+            label: "Dashboard",
+            active: pathname.startsWith("/dashboard"),
+            protected: true,
+          },
+        ]
+      : []),
     ...(isAdmin
       ? [
           {
@@ -136,9 +140,11 @@ function UserNav({ user }: { user: User }) {
             <Link href="/admin">Admin Panel</Link>
           </DropdownMenuItem>
         )}
-        <DropdownMenuItem asChild>
-          <Link href="/dashboard">Dashboard</Link>
-        </DropdownMenuItem>
+        {!isAdmin && (
+          <DropdownMenuItem asChild>
+            <Link href="/dashboard">Dashboard</Link>
+          </DropdownMenuItem>
+        )}
         <DropdownMenuItem asChild>
           <Link href="/dashboard/settings">Settings</Link>
         </DropdownMenuItem>
