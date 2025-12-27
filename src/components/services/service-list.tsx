@@ -79,7 +79,7 @@ export function ServiceList({ services }: ServiceListProps) {
             </div>
 
             <CardHeader className="pb-2">
-              <CardTitle className="group-hover:text-primary text-xl font-bold text-gray-900 transition-colors">
+              <CardTitle className="group-hover:text-primary text-xl font-bold text-gray-900 transition-colors dark:text-gray-100">
                 {service.title}
               </CardTitle>
             </CardHeader>
