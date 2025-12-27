@@ -44,16 +44,13 @@ export function LoginForm() {
         const result = await signIn("credentials", {
           email: data.email,
           password: data.password,
-          redirect: false,
+          callbackUrl: "/dashboard",
         });
 
         if (result?.error) {
           form.setError("root", { message: "Invalid email or password" });
           return;
         }
-
-        // Use window.location for hard redirect to ensure session is loaded
-        window.location.href = "/dashboard";
       } catch (error) {
         form.setError("root", {
           message: "Something went wrong. Please try again.",
