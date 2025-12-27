@@ -43,6 +43,6 @@ prompt.txt
 !.env.example
 
 
-projectPaper.txt
-executionPlan.txt
+
+
 /src/generated/prisma
