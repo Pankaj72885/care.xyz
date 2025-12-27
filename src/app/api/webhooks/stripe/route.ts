@@ -20,16 +20,25 @@ export async function POST(req: Request) {
       signature,
       process.env.STRIPE_WEBHOOK_SECRET!
     );
-  } catch (error: any) {
-    return new NextResponse(`Webhook Error: ${error.message}`, { status: 400 });
+  } catch (error) {
+    return new NextResponse(`Webhook Error: ${(error as Error).message}`, {
+      status: 400,
+    });
   }
 
   const session = event.data.object as Stripe.PaymentIntent;
 
   if (event.type === "payment_intent.succeeded") {
-    const bookingId = session.metadata.bookingId;
+    const bookingId = session.metadata?.bookingId;
 
     if (bookingId) {
+      // Cast to allow accessing charges which might be missing from the base type if not expanded
+      const sessionWithCharges = session as Stripe.PaymentIntent & {
+        charges: Stripe.ApiList<Stripe.Charge>;
+      };
+      const receiptUrl =
+        sessionWithCharges.charges?.data?.[0]?.receipt_url ?? null;
+
       const booking = await prisma.booking.update({
         where: { id: bookingId },
         data: {
@@ -40,7 +49,7 @@ export async function POST(req: Request) {
               currency: session.currency,
               stripePaymentIntentId: session.id,
               status: session.status,
-              receiptUrl: (session as any).charges?.data?.[0]?.receipt_url,
+              receiptUrl: receiptUrl,
             },
           },
         },
@@ -60,7 +69,7 @@ export async function POST(req: Request) {
           totalCost: booking.totalCost,
           durationValue: booking.durationValue,
           durationUnit: booking.durationUnit,
-          receiptUrl: (session as any).charges?.data?.[0]?.receipt_url,
+          receiptUrl: receiptUrl,
           bookingDate: booking.createdAt,
         })
       );

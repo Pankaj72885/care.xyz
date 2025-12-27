@@ -21,7 +21,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { areas, districts } from "@/lib/data/locations";
+import { districts } from "@/lib/data/locations";
 import {
   BookingCreateInput,
   bookingCreateSchema,
@@ -60,7 +60,7 @@ export function BookingForm({ service }: BookingFormProps) {
     mode: "onChange",
   });
 
-  const { watch, setValue } = form;
+  const { watch } = form;
   const watchData = watch();
 
   // Derived state for cost
@@ -96,7 +96,7 @@ export function BookingForm({ service }: BookingFormProps) {
           message: result.error || "Failed to create booking",
         });
       }
-    } catch (error) {
+    } catch {
       form.setError("root", { message: "Something went wrong" });
     } finally {
       setIsPending(false);
@@ -106,10 +106,7 @@ export function BookingForm({ service }: BookingFormProps) {
   // Location logic (simplified)
   const divisions = Object.keys(districts);
   const currentDistricts = watchData.division
-    ? (districts as any)[watchData.division] || []
-    : [];
-  const currentAreas = watchData.division
-    ? (areas as any)[watchData.division] || []
+    ? (districts as Record<string, string[]>)[watchData.division] || []
     : [];
   // Note: dummy data structure is a bit flat/inconsistent, adjusting for demo:
   // Using direct areas just based on division for simplicity in this demo if district/city map isn't complex

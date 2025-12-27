@@ -1,5 +1,4 @@
 import { getUserBookings } from "@/app/actions/booking";
-import { auth } from "@/auth";
 import { BookingActions } from "@/components/dashboard/booking-actions";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -13,7 +12,6 @@ import {
 import { format } from "date-fns";
 
 export default async function BookingsPage() {
-  const session = await auth();
   const bookings = await getUserBookings();
 
   return (

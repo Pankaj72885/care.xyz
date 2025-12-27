@@ -2,21 +2,6 @@ import { Badge } from "@/components/ui/badge";
 import { BookingStatus } from "@prisma/client";
 
 export function BookingStatusBadge({ status }: { status: BookingStatus }) {
-  const getVariant = (status: BookingStatus) => {
-    switch (status) {
-      case "PENDING":
-        return "secondary"; // yellow-ish usually handled via custom class or secondary
-      case "CONFIRMED":
-        return "default"; // primary/green
-      case "COMPLETED":
-        return "outline"; // generic
-      case "CANCELLED":
-        return "destructive"; // red
-      default:
-        return "secondary";
-    }
-  };
-
   const getCustomClass = (status: BookingStatus) => {
     switch (status) {
       case "PENDING":

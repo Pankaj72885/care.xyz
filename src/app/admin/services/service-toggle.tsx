@@ -14,7 +14,7 @@ export function ServiceToggle({
 }) {
   const [isPending, startTransition] = useTransition();
 
-  const handleToggle = (checked: boolean) => {
+  const handleToggle = () => {
     startTransition(async () => {
       try {
         await toggleServiceStatus(serviceId);

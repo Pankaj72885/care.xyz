@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 
@@ -28,6 +29,7 @@ import { LoginInput, loginSchema } from "@/lib/validations/auth";
 import { signIn } from "next-auth/react";
 
 export function LoginForm() {
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<LoginInput>({
@@ -44,6 +46,7 @@ export function LoginForm() {
         const result = await signIn("credentials", {
           email: data.email,
           password: data.password,
+          redirect: false,
           callbackUrl: "/dashboard",
         });
 
@@ -51,7 +54,10 @@ export function LoginForm() {
           form.setError("root", { message: "Invalid email or password" });
           return;
         }
-      } catch (error) {
+
+        router.push("/dashboard");
+        router.refresh();
+      } catch {
         form.setError("root", {
           message: "Something went wrong. Please try again.",
         });

@@ -52,7 +52,7 @@ export async function createBooking(
         area: data.area,
         address: data.address,
         totalCost: calculatedCost,
-        status: "PENDING",
+        status: "PENDING", // Enforce correct Enum value
       },
     });
 
@@ -144,5 +144,46 @@ export async function completeBooking(bookingId: string) {
     throw error instanceof Error
       ? error
       : new Error("Failed to complete booking");
+  }
+}
+
+// User: Cancel booking
+export async function cancelBooking(bookingId: string) {
+  const session = await auth();
+
+  if (!session || !session.user) {
+    throw new Error("Unauthorized");
+  }
+
+  try {
+    const booking = await prisma.booking.findUnique({
+      where: { id: bookingId },
+    });
+
+    if (!booking) {
+      throw new Error("Booking not found");
+    }
+
+    if (booking.userId !== session.user.id) {
+      throw new Error("Unauthorized: You can only cancel your own bookings");
+    }
+
+    if (booking.status === "COMPLETED" || booking.status === "CANCELLED") {
+      throw new Error("Cannot cancel a completed or already cancelled booking");
+    }
+
+    const updatedBooking = await prisma.booking.update({
+      where: { id: bookingId },
+      data: { status: "CANCELLED" },
+    });
+
+    revalidatePath("/dashboard");
+    revalidatePath("/admin/bookings");
+    return { success: true, booking: updatedBooking };
+  } catch (error) {
+    console.error("Failed to cancel booking:", error);
+    throw error instanceof Error
+      ? error
+      : new Error("Failed to cancel booking");
   }
 }

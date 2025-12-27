@@ -61,7 +61,7 @@ export function CompleteProfileForm() {
         }
 
         router.push("/dashboard");
-      } catch (error) {
+      } catch {
         form.setError("root", {
           message: "Something went wrong. Please try again.",
         });
