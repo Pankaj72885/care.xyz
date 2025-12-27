@@ -36,6 +36,7 @@ export const authConfig = {
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
+      const isAdmin = auth?.user?.role === "ADMIN";
       const isOnAdmin = nextUrl.pathname.startsWith("/admin");
       const isOnDashboard = nextUrl.pathname.startsWith("/dashboard");
       const isOnBooking = nextUrl.pathname.startsWith("/booking");
@@ -46,7 +47,7 @@ export const authConfig = {
 
       // Admin routes require ADMIN role
       if (isOnAdmin) {
-        if (isLoggedIn && auth?.user?.role === "ADMIN") return true;
+        if (isLoggedIn && isAdmin) return true;
         return false;
       }
 
@@ -56,9 +57,11 @@ export const authConfig = {
         return false; // Redirect unauthenticated users to login page
       }
 
-      // Redirect logged-in users away from auth pages
+      // Redirect logged-in users away from auth pages based on role
       if (isLoggedIn && isOnAuth) {
-        return Response.redirect(new URL("/dashboard", nextUrl));
+        // Admins go to /admin, regular users go to /dashboard
+        const redirectUrl = isAdmin ? "/admin" : "/dashboard";
+        return Response.redirect(new URL(redirectUrl, nextUrl));
       }
 
       return true;
