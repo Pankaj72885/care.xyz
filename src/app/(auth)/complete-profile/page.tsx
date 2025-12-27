@@ -9,9 +9,9 @@ export default async function CompleteProfilePage() {
     redirect("/login");
   }
 
-  // If user already has NID and contact, redirect to services
+  // If user already has NID and contact, redirect to dashboard
   if (session.user.nid && session.user.contact) {
-    redirect("/services");
+    redirect("/dashboard");
   }
 
   return (

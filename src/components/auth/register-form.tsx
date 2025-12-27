@@ -58,8 +58,23 @@ export function RegisterForm() {
           return;
         }
 
-        console.log("Registration successful, redirecting to booking page...");
-        router.push("/services");
+        console.log("Registration successful, logging in...");
+        // Auto-login the user after registration
+        const loginResult = await signIn("credentials", {
+          email: data.email,
+          password: data.password,
+          redirect: false,
+        });
+
+        if (loginResult?.error) {
+          console.error("Auto-login failed:", loginResult.error);
+          // Registration succeeded but login failed, redirect to login page
+          router.push("/login?registered=true");
+          return;
+        }
+
+        console.log("Auto-login successful, redirecting to dashboard...");
+        router.push("/dashboard");
       } catch (error) {
         console.error("Registration exception:", error);
         form.setError("root", {
