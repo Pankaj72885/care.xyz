@@ -1,3 +1,5 @@
+import { BookingFilter } from "@/components/admin/booking-filter";
+import { BookingStatusSelect } from "@/components/admin/booking-status-select";
 import { BookingStatusBadge } from "@/components/booking-status-badge";
 import {
   Card,
@@ -15,14 +17,63 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { prisma } from "@/lib/prisma";
+import { BookingStatus, Prisma } from "@prisma/client";
+import { format } from "date-fns";
 import Link from "next/link";
 
-// Server action wrapper for client component usage (or use client component)
-// Since we want interactivity, let's make a small client component for the row actions
-import { BookingStatusSelect } from "@/components/admin/booking-status-select";
+interface AdminBookingsPageProps {
+  searchParams: Promise<{
+    service?: string;
+    location?: string;
+    date?: string;
+    status?: string;
+  }>;
+}
 
-export default async function AdminBookingsPage() {
+export default async function AdminBookingsPage({
+  searchParams,
+}: AdminBookingsPageProps) {
+  const params = await searchParams;
+  const where: Prisma.BookingWhereInput = {};
+
+  // Service Filter
+  if (params.service) {
+    where.service = {
+      title: {
+        contains: params.service,
+        mode: "insensitive",
+      },
+    };
+  }
+
+  // Location Filter (Search across district, city, address)
+  if (params.location) {
+    where.OR = [
+      { district: { contains: params.location, mode: "insensitive" } },
+      { city: { contains: params.location, mode: "insensitive" } },
+      { address: { contains: params.location, mode: "insensitive" } },
+    ];
+  }
+
+  // Date Filter (Check if booking overlaps with the selected date)
+  if (params.date) {
+    const searchDate = new Date(params.date);
+    const nextDate = new Date(searchDate);
+    nextDate.setDate(nextDate.getDate() + 1);
+
+    where.startTime = {
+      gte: searchDate,
+      lt: nextDate,
+    };
+  }
+
+  // Status Filter
+  if (params.status && params.status !== "ALL") {
+    where.status = params.status as BookingStatus;
+  }
+
   const bookings = await prisma.booking.findMany({
+    where,
     orderBy: { createdAt: "desc" },
     include: {
       user: {
@@ -49,6 +100,8 @@ export default async function AdminBookingsPage() {
         </h1>
       </div>
 
+      <BookingFilter />
+
       <Card>
         <CardHeader>
           <CardTitle>All Bookings</CardTitle>
@@ -63,8 +116,8 @@ export default async function AdminBookingsPage() {
                 <TableHead>Booking ID</TableHead>
                 <TableHead>User</TableHead>
                 <TableHead>Service</TableHead>
-                <TableHead>Address</TableHead>
-                <TableHead>Date</TableHead>
+                <TableHead>Schedule</TableHead>
+                <TableHead>Location</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
@@ -73,7 +126,7 @@ export default async function AdminBookingsPage() {
               {bookings.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={7} className="h-24 text-center">
-                    No bookings found.
+                    No bookings found matching your filters.
                   </TableCell>
                 </TableRow>
               ) : (
@@ -96,19 +149,32 @@ export default async function AdminBookingsPage() {
                       </div>
                     </TableCell>
                     <TableCell>{booking.service.title}</TableCell>
+                    <TableCell>
+                      <div className="flex flex-col text-sm">
+                        <span className="font-medium">
+                          {booking.startTime
+                            ? format(booking.startTime, "PP")
+                            : "N/A"}
+                        </span>
+                        <span className="text-muted-foreground text-xs">
+                          {booking.startTime
+                            ? format(booking.startTime, "p")
+                            : ""}
+                          {" - "}
+                          {booking.endTime ? format(booking.endTime, "p") : ""}
+                        </span>
+                      </div>
+                    </TableCell>
                     <TableCell
                       className="max-w-[200px] truncate"
                       title={`${booking.address}, ${booking.city}, ${booking.district}`}
                     >
                       <div className="flex flex-col text-sm">
-                        <span>{booking.address}</span>
+                        <span>{booking.district}</span>
                         <span className="text-muted-foreground text-xs">
-                          {booking.city}, {booking.district}
+                          {booking.city}, {booking.area}
                         </span>
                       </div>
-                    </TableCell>
-                    <TableCell>
-                      {new Date(booking.createdAt).toLocaleDateString()}
                     </TableCell>
                     <TableCell>
                       <BookingStatusBadge status={booking.status} />
