@@ -112,6 +112,12 @@ export function UserEditForm({ user }: UserEditFormProps) {
     setLoading(true);
 
     try {
+      if (formData.nid && !/^(\d{10}|\d{13}|\d{17})$/.test(formData.nid)) {
+        toast.error("NID must be 10, 13, or 17 digits");
+        setLoading(false);
+        return;
+      }
+
       await updateUser(user.id, formData);
       toast.success("User updated successfully");
       router.push("/admin/users");

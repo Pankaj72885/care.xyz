@@ -3,9 +3,7 @@ import { z } from "zod";
 export const registerSchema = z.object({
   nid: z
     .string()
-    .min(13, "NID must be 13 digits")
-    .max(13, "NID must be 13 digits")
-    .regex(/^\d+$/, "NID must contain only numbers"),
+    .regex(/^(\d{10}|\d{13}|\d{17})$/, "NID must be 10, 13, or 17 digits"),
   name: z.string().min(2, "Name is required"),
   email: z.string().email("Invalid email address"),
   contact: z

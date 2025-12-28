@@ -40,7 +40,10 @@ const settingsSchema = z.object({
   nid: z
     .string()
     .optional()
-    .refine((val) => !val || /^\d{13}$/.test(val), "NID must be 13 digits"),
+    .refine(
+      (val) => !val || /^(\d{10}|\d{13}|\d{17})$/.test(val),
+      "NID must be 10, 13, or 17 digits"
+    ),
   contact: z
     .string()
     .optional()

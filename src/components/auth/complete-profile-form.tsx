@@ -28,9 +28,7 @@ import { Input } from "@/components/ui/input";
 const profileSchema = z.object({
   nid: z
     .string()
-    .min(13, "NID must be 13 digits")
-    .max(13, "NID must be 13 digits")
-    .regex(/^\d+$/, "NID must contain only numbers"),
+    .regex(/^(\d{10}|\d{13}|\d{17})$/, "NID must be 10, 13, or 17 digits"),
   contact: z
     .string()
     .min(11, "Contact must be 11 digits")
