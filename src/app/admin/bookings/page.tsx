@@ -15,6 +15,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { prisma } from "@/lib/prisma";
+import Link from "next/link";
 
 // Server action wrapper for client component usage (or use client component)
 // Since we want interactivity, let's make a small client component for the row actions
@@ -26,6 +27,7 @@ export default async function AdminBookingsPage() {
     include: {
       user: {
         select: {
+          id: true,
           name: true,
           email: true,
           contact: true,
@@ -61,6 +63,7 @@ export default async function AdminBookingsPage() {
                 <TableHead>Booking ID</TableHead>
                 <TableHead>User</TableHead>
                 <TableHead>Service</TableHead>
+                <TableHead>Address</TableHead>
                 <TableHead>Date</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
@@ -69,7 +72,7 @@ export default async function AdminBookingsPage() {
             <TableBody>
               {bookings.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="h-24 text-center">
+                  <TableCell colSpan={7} className="h-24 text-center">
                     No bookings found.
                   </TableCell>
                 </TableRow>
@@ -81,13 +84,29 @@ export default async function AdminBookingsPage() {
                     </TableCell>
                     <TableCell>
                       <div className="flex flex-col">
-                        <span className="font-medium">{booking.user.name}</span>
+                        <Link
+                          href={`/admin/users/${booking.user.id}`}
+                          className="font-medium hover:underline"
+                        >
+                          {booking.user.name}
+                        </Link>
                         <span className="text-muted-foreground text-xs">
                           {booking.user.email}
                         </span>
                       </div>
                     </TableCell>
                     <TableCell>{booking.service.title}</TableCell>
+                    <TableCell
+                      className="max-w-[200px] truncate"
+                      title={`${booking.address}, ${booking.city}, ${booking.district}`}
+                    >
+                      <div className="flex flex-col text-sm">
+                        <span>{booking.address}</span>
+                        <span className="text-muted-foreground text-xs">
+                          {booking.city}, {booking.district}
+                        </span>
+                      </div>
+                    </TableCell>
                     <TableCell>
                       {new Date(booking.createdAt).toLocaleDateString()}
                     </TableCell>

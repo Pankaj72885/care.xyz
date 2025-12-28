@@ -184,6 +184,10 @@ export async function updateUser(
     email: string;
     contact?: string;
     nid?: string;
+    division?: string;
+    district?: string;
+    upazila?: string;
+    address?: string;
   }
 ) {
   const session = await auth();
@@ -228,6 +232,10 @@ export async function updateUser(
       email: data.email,
       contact: data.contact || null,
       nid: data.nid || null,
+      division: data.division || null,
+      district: data.district || null,
+      upazila: data.upazila || null,
+      address: data.address || null,
     },
   });
 

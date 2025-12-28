@@ -13,6 +13,10 @@ const updateProfileSchema = z.object({
     .string()
     .optional()
     .refine((val) => !val || /^\d{11}$/.test(val), "Contact must be 11 digits"),
+  division: z.string().optional(),
+  district: z.string().optional(),
+  upazila: z.string().optional(),
+  address: z.string().optional(),
 });
 
 export async function PATCH(req: Request) {
@@ -24,7 +28,8 @@ export async function PATCH(req: Request) {
     }
 
     const body = await req.json();
-    const { name, nid, contact } = updateProfileSchema.parse(body);
+    const { name, nid, contact, division, district, upazila, address } =
+      updateProfileSchema.parse(body);
 
     // Check if NID is being updated and if it's already taken
     if (nid) {
@@ -45,6 +50,10 @@ export async function PATCH(req: Request) {
         name,
         nid,
         contact,
+        division,
+        district,
+        upazila,
+        address,
       },
     });
 

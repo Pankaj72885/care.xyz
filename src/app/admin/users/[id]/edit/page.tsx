@@ -16,6 +16,10 @@ export default async function EditUserPage({
       email: true,
       contact: true,
       nid: true,
+      division: true,
+      district: true,
+      upazila: true,
+      address: true,
     },
   });
 

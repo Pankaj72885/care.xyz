@@ -39,6 +39,10 @@ model User {
   bookings      Booking[]
   accounts      Account[]
   image         String?
+  division      String?
+  district      String?
+  upazila       String?
+  address       String?
 }
 
 model Account {

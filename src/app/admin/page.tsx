@@ -193,6 +193,9 @@ export default async function AdminDashboardPage() {
                       <p className="text-muted-foreground text-sm">
                         by {booking.user.name} ({booking.user.email})
                       </p>
+                      <p className="text-muted-foreground mt-1 text-xs">
+                        {booking.address}, {booking.city}
+                      </p>
                     </div>
                     <div className="flex flex-col items-end">
                       <span className="font-medium">

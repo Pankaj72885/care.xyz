@@ -1,4 +1,5 @@
-import { PrismaClient } from "@prisma/client";
+import { faker } from "@faker-js/faker";
+import { BookingStatus, DurationUnit, PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
@@ -64,12 +65,14 @@ async function main() {
   console.log("🌱 Seeding database...");
 
   // Create Services
+  const createdServices = [];
   for (const service of services) {
     const activeService = await prisma.service.upsert({
       where: { slug: service.slug },
       update: service, // Update existing records with new data
       create: service,
     });
+    createdServices.push(activeService);
     console.log(`Created service: ${activeService.title}`);
   }
 
@@ -94,6 +97,84 @@ async function main() {
   });
 
   console.log(`Created admin user: ${admin.email}`);
+
+  // Create 10 Random Users
+  const userPassword = await bcrypt.hash("User@123456", 10);
+  const usersToCreate = 10;
+
+  console.log(`Creating ${usersToCreate} random users...`);
+
+  for (let i = 0; i < usersToCreate; i++) {
+    const firstName = faker.person.firstName();
+    const lastName = faker.person.lastName();
+    const name = `${firstName} ${lastName}`;
+    const email = faker.internet.email({ firstName, lastName }).toLowerCase();
+
+    // Create User
+    const user = await prisma.user.upsert({
+      where: { email },
+      update: {},
+      create: {
+        email,
+        name,
+        passwordHash: userPassword,
+        role: "USER",
+        contact: faker.phone.number(),
+        nid: faker.number.int({ min: 1000000000, max: 9999999999 }).toString(),
+        image: faker.image.avatar(),
+      },
+    });
+
+    console.log(`Created user: ${user.name} (${user.email})`);
+
+    // Create 1-3 Booking per user
+    const numberOfBookings = faker.number.int({ min: 1, max: 3 });
+    for (let j = 0; j < numberOfBookings; j++) {
+      const randomService =
+        createdServices[
+          faker.number.int({ min: 0, max: createdServices.length - 1 })
+        ];
+      const bookingDuration = faker.number.int({ min: 1, max: 10 });
+      const totalCost = randomService.baseRate * bookingDuration;
+
+      const booking = await prisma.booking.create({
+        data: {
+          userId: user.id,
+          serviceId: randomService.id,
+          durationUnit: DurationUnit.HOUR,
+          durationValue: bookingDuration,
+          division: faker.location.state(),
+          district: faker.location.city(),
+          city: faker.location.city(),
+          area: faker.location.street(),
+          address: faker.location.streetAddress(),
+          totalCost: totalCost,
+          status: faker.helpers.arrayElement([
+            "PENDING",
+            "CONFIRMED",
+            "COMPLETED",
+          ]) as BookingStatus,
+        },
+      });
+
+      // Decide if payment is made
+      if (["CONFIRMED", "COMPLETED"].includes(booking.status)) {
+        await prisma.payment.create({
+          data: {
+            bookingId: booking.id,
+            amount: totalCost,
+            currency: "BDT",
+            stripePaymentIntentId: `pi_${faker.string.alphanumeric(24)}`,
+            status: "succeeded",
+          },
+        });
+        console.log(` > Paid booking for ${randomService.title}`);
+      } else {
+        console.log(` > Created pending booking for ${randomService.title}`);
+      }
+    }
+  }
+
   console.log("✅ Seeding completed.");
 }
 

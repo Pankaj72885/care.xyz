@@ -40,6 +40,10 @@ export default async function SettingsPage() {
           role: user.role,
           nid: user.nid,
           contact: user.contact,
+          division: user.division,
+          district: user.district,
+          upazila: user.upazila,
+          address: user.address,
         }}
       />
 

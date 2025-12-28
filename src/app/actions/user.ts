@@ -22,6 +22,10 @@ export async function getCurrentUser() {
       nid: true,
       contact: true,
       image: true,
+      division: true,
+      district: true,
+      upazila: true,
+      address: true,
     },
   });
 

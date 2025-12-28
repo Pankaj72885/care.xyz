@@ -21,16 +21,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { districts } from "@/lib/data/locations";
 import {
   BookingCreateInput,
   bookingCreateSchema,
 } from "@/lib/validations/booking";
+import * as bd from "@bangladeshi/bangladesh-address/build/src";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Service } from "@prisma/client";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 interface BookingFormProps {
@@ -44,6 +44,19 @@ export function BookingForm({ service }: BookingFormProps) {
   const [step, setStep] = useState(0);
   const [isPending, setIsPending] = useState(false);
   const router = useRouter();
+
+  const [divisions, setDivisions] = useState<string[]>([]);
+  const [districts, setDistricts] = useState<string[]>([]);
+  const [upazilas, setUpazilas] = useState<string[]>([]);
+
+  useEffect(() => {
+    try {
+      const allDivs = bd.allDivision();
+      setDivisions(allDivs || []);
+    } catch (e) {
+      console.error("Failed to load divisions", e);
+    }
+  }, []);
 
   const form = useForm<BookingCreateInput>({
     resolver: zodResolver(bookingCreateSchema),
@@ -60,11 +73,46 @@ export function BookingForm({ service }: BookingFormProps) {
     mode: "onChange",
   });
 
-  const { watch } = form;
+  const { watch, setValue } = form;
   const watchData = watch();
+  const currentDivision = watchData.division;
+  const currentDistrict = watchData.district;
 
   // Derived state for cost
   const totalCost = watchData.durationValue * service.baseRate;
+
+  useEffect(() => {
+    if (currentDivision) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const dists = bd.districtsOf(currentDivision as any);
+      const distNames = Array.isArray(dists)
+        ? dists.map((d: { district?: string; name?: string } | string) =>
+            typeof d === "string" ? d : d.district || d.name || (d as string)
+          )
+        : [];
+      setDistricts(distNames);
+      setValue("district", "");
+      setValue("city", ""); // Reset city/upazila
+    } else {
+      setDistricts([]);
+    }
+  }, [currentDivision, setValue]);
+
+  useEffect(() => {
+    if (currentDistrict) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const upas = bd.upazilasOf(currentDistrict as any);
+      const upaNames = Array.isArray(upas)
+        ? upas.map((u: { upazila?: string; name?: string } | string) =>
+            typeof u === "string" ? u : u.upazila || u.name || (u as string)
+          )
+        : [];
+      setUpazilas(upaNames);
+      setValue("city", ""); // Reset city/upazila
+    } else {
+      setUpazilas([]);
+    }
+  }, [currentDistrict, setValue]);
 
   // Handle step navigation
   const nextStep = async () => {
@@ -104,10 +152,10 @@ export function BookingForm({ service }: BookingFormProps) {
   }
 
   // Location logic (simplified)
-  const divisions = Object.keys(districts);
-  const currentDistricts = watchData.division
-    ? (districts as Record<string, string[]>)[watchData.division] || []
-    : [];
+  // const divisions = Object.keys(districts); // Old logic
+  // const currentDistricts = watchData.division
+  //   ? (districts as Record<string, string[]>)[watchData.division] || []
+  //   : [];
   // Note: dummy data structure is a bit flat/inconsistent, adjusting for demo:
   // Using direct areas just based on division for simplicity in this demo if district/city map isn't complex
 
@@ -253,7 +301,7 @@ export function BookingForm({ service }: BookingFormProps) {
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
-                                {currentDistricts.map((d: string) => (
+                                {districts.map((d: string) => (
                                   <SelectItem key={d} value={d}>
                                     {d}
                                   </SelectItem>
@@ -265,17 +313,30 @@ export function BookingForm({ service }: BookingFormProps) {
                         )}
                       />
 
-                      {/* Simplified City to be same text input for now or dropdown */}
-                      {/* Just using text input for City/Area if not in dummy list to save time, or use Area dropdown */}
                       <FormField
                         control={form.control}
                         name="city"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>City/Thana</FormLabel>
-                            <FormControl>
-                              <Input {...field} placeholder="e.g. Gulshan" />
-                            </FormControl>
+                            <FormLabel>Upazila/Thana</FormLabel>
+                            <Select
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                              disabled={!watchData.district}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select Upazila" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                {upazilas.map((u) => (
+                                  <SelectItem key={u} value={u}>
+                                    {u}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
                             <FormMessage />
                           </FormItem>
                         )}
