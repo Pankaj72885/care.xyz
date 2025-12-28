@@ -505,7 +505,7 @@ export function BookingForm({ service }: BookingFormProps) {
       </div>
 
       {/* SUMMARY PANEL (Visible on Desktop) */}
-      <div className="hidden md:col-span-1 md:block">
+      <div className="md:col-span-1">
         <Card>
           <CardHeader>
             <CardTitle>Booking Summary</CardTitle>

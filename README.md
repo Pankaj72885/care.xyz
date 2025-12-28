@@ -48,10 +48,12 @@ Built with performance, security, and accessibility in mind, this project demons
   - Metadata optimization for search visibility.
 - **Smart Booking System**:
   - **Multi-Step Wizard**: Duration → Location (Division/District/City/Area) → Address → Review.
+  - **Precise Scheduling**: Exact Start and End time selection with conflict-free validation.
   - **Live Cost Calculation**: Real-time estimates based on service rates, duration, and unit (Hour/Day).
   - **Hierarchical Location Data**: Division-District-Upazila logic for precise service delivery.
 - **Booking Management**:
   - **Dashboard**: User-friendly table with status badges (`PENDING`, `CONFIRMED`, `COMPLETED`, `CANCELLED`).
+  - **Advanced Admin Filtering**: Filter bookings by Service Type, Location, Date, or Status.
   - **Actions**: One-click options to Pay, Cancel, or View invoices.
 
 ### 💳 Payments & Transactions
@@ -153,7 +155,15 @@ Developing a platform of this scale presented several unique challenges. Here is
 - **Problem**: Next.js 13+ metadata system requires careful handling of absolute URLs for OpenGraph images, which often breaks across different environments (local vs production).
 - **Solution**: Implemented a global `metadataBase` configuration in `layout.tsx` using environment variables (`NEXT_PUBLIC_APP_URL`), allowing all child pages to use relative paths for images and canonicals cleanly.
 
----
+### 7. **Complex Date & Time Handling**
+
+- **Problem**: Managing precise booking schedules with start/end times across server (Prisma `Date`) and client (HTML `datetime-local`) boundaries caused significant hydration definition mismatches and validation errors. Specifically, Zod's `z.coerce.date()` clashed with React Hook Form's internal state management.
+- **Solution**: Standardized on native `Date` objects within the frontend state. Replaced `coerce` logic with strict `z.date()` validation and implemented a custom change handler in the UI to parse ISO strings immediately, ensuring type consistency throughout the lifecycle.
+
+### 8. **Bangladesh Geo-Integration**
+
+- **Problem**: Users often entered inconsistent location data (spelling errors in District/Upazila names), leading to logistics failures.
+- **Solution**: Integrated the specialized `@bangladeshi/bangladesh-address` library. This provides a clean, cascading dropdown experience (Division -> District -> Upazila), ensuring 100% accurate, standardized location data for every booking.
 
 ## 🚀 Getting Started
 
