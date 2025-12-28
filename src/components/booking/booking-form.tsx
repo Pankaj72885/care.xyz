@@ -12,7 +12,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Select,
   SelectContent,
@@ -28,6 +27,7 @@ import {
 import * as bd from "@bangladeshi/bangladesh-address/build/src";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Service } from "@prisma/client";
+import { differenceInHours, format } from "date-fns";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -38,7 +38,7 @@ interface BookingFormProps {
   userId: string;
 }
 
-const steps = ["Duration", "Location", "Review"];
+const steps = ["Schedule", "Location", "Review"];
 
 export function BookingForm({ service }: BookingFormProps) {
   const [step, setStep] = useState(0);
@@ -69,6 +69,8 @@ export function BookingForm({ service }: BookingFormProps) {
       city: "",
       area: "",
       address: "",
+      startTime: undefined,
+      endTime: undefined,
     },
     mode: "onChange",
   });
@@ -77,10 +79,28 @@ export function BookingForm({ service }: BookingFormProps) {
   const watchData = watch();
   const currentDivision = watchData.division;
   const currentDistrict = watchData.district;
+  const startTime = watchData.startTime;
+  const endTime = watchData.endTime;
 
   // Derived state for cost
   const totalCost = watchData.durationValue * service.baseRate;
 
+  // Calculate duration when start/end time changes
+  useEffect(() => {
+    if (startTime && endTime) {
+      const start = new Date(startTime);
+      const end = new Date(endTime);
+      if (!isNaN(start.getTime()) && !isNaN(end.getTime())) {
+        const diff = differenceInHours(end, start);
+        if (diff > 0) {
+          setValue("durationValue", Math.ceil(diff));
+          setValue("durationUnit", diff > 24 ? "DAY" : "HOUR");
+        }
+      }
+    }
+  }, [startTime, endTime, setValue]);
+
+  // Location logic
   useEffect(() => {
     if (currentDivision) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -118,7 +138,12 @@ export function BookingForm({ service }: BookingFormProps) {
   const nextStep = async () => {
     let fieldsToValidate: (keyof BookingCreateInput)[] = [];
     if (step === 0) {
-      fieldsToValidate = ["durationUnit", "durationValue"];
+      fieldsToValidate = [
+        "startTime",
+        "endTime",
+        "durationValue",
+        "durationUnit",
+      ];
     } else if (step === 1) {
       fieldsToValidate = ["division", "district", "city", "area", "address"];
     }
@@ -151,14 +176,6 @@ export function BookingForm({ service }: BookingFormProps) {
     }
   }
 
-  // Location logic (simplified)
-  // const divisions = Object.keys(districts); // Old logic
-  // const currentDistricts = watchData.division
-  //   ? (districts as Record<string, string[]>)[watchData.division] || []
-  //   : [];
-  // Note: dummy data structure is a bit flat/inconsistent, adjusting for demo:
-  // Using direct areas just based on division for simplicity in this demo if district/city map isn't complex
-
   return (
     <div className="grid gap-6 md:grid-cols-2">
       <div className="md:col-span-1">
@@ -188,67 +205,82 @@ export function BookingForm({ service }: BookingFormProps) {
                 onSubmit={form.handleSubmit(onSubmit)}
                 className="space-y-4"
               >
-                {/* STEP 1: DURATION */}
+                {/* STEP 1: SCHEDULE */}
                 {step === 0 && (
                   <div className="space-y-4">
-                    <FormField
-                      control={form.control}
-                      name="durationUnit"
-                      render={({ field }) => (
-                        <FormItem className="space-y-3">
-                          <FormLabel>Duration Type</FormLabel>
-                          <FormControl>
-                            <RadioGroup
-                              onValueChange={field.onChange}
-                              defaultValue={field.value}
-                              className="flex flex-col space-y-1"
-                            >
-                              <FormItem className="flex items-center space-y-0 space-x-3">
-                                <FormControl>
-                                  <RadioGroupItem value="HOUR" />
-                                </FormControl>
-                                <FormLabel className="font-normal">
-                                  Hourly
-                                </FormLabel>
-                              </FormItem>
-                              <FormItem className="flex items-center space-y-0 space-x-3">
-                                <FormControl>
-                                  <RadioGroupItem value="DAY" />
-                                </FormControl>
-                                <FormLabel className="font-normal">
-                                  Daily
-                                </FormLabel>
-                              </FormItem>
-                            </RadioGroup>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                    <div className="grid grid-cols-2 gap-4">
+                      <FormField
+                        control={form.control}
+                        name="startTime"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>From</FormLabel>
+                            <FormControl>
+                              <Input
+                                type="datetime-local"
+                                {...field}
+                                value={
+                                  field.value instanceof Date &&
+                                  !isNaN(field.value.getTime())
+                                    ? format(field.value, "yyyy-MM-dd'T'HH:mm")
+                                    : ""
+                                }
+                                onChange={(e) => {
+                                  const date = new Date(e.target.value);
+                                  if (!isNaN(date.getTime())) {
+                                    field.onChange(date);
+                                  } else if (e.target.value === "") {
+                                    field.onChange(undefined);
+                                  }
+                                }}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
-                    <FormField
-                      control={form.control}
-                      name="durationValue"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>
-                            How many {watchData.durationUnit.toLowerCase()}s?
-                          </FormLabel>
-                          <FormControl>
-                            <Input
-                              type="number"
-                              {...field}
-                              onChange={(e) =>
-                                field.onChange(parseInt(e.target.value) || 0)
-                              }
-                              value={field.value}
-                              min={1}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                      <FormField
+                        control={form.control}
+                        name="endTime"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>To</FormLabel>
+                            <FormControl>
+                              <Input
+                                type="datetime-local"
+                                {...field}
+                                value={
+                                  field.value instanceof Date &&
+                                  !isNaN(field.value.getTime())
+                                    ? format(field.value, "yyyy-MM-dd'T'HH:mm")
+                                    : ""
+                                }
+                                onChange={(e) => {
+                                  const date = new Date(e.target.value);
+                                  if (!isNaN(date.getTime())) {
+                                    field.onChange(date);
+                                  } else if (e.target.value === "") {
+                                    field.onChange(undefined);
+                                  }
+                                }}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    <div className="rounded-md bg-blue-50 p-4 text-blue-900">
+                      <p className="text-sm font-medium">
+                        Estimated Duration: {watchData.durationValue}{" "}
+                        {watchData.durationUnit?.toLowerCase()}(s)
+                      </p>
+                      <p className="mt-1 text-xs text-blue-700">
+                        Minimum 1 hour charge. Duration is rounded up.
+                      </p>
+                    </div>
                   </div>
                 )}
 
@@ -386,6 +418,22 @@ export function BookingForm({ service }: BookingFormProps) {
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Service</span>
                         <span className="font-medium">{service.title}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">From</span>
+                        <span className="font-medium">
+                          {watchData.startTime
+                            ? format(watchData.startTime, "PPp")
+                            : "-"}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">To</span>
+                        <span className="font-medium">
+                          {watchData.endTime
+                            ? format(watchData.endTime, "PPp")
+                            : "-"}
+                        </span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Duration</span>

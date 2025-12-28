@@ -89,6 +89,8 @@ model Booking {
   city          String
   area          String
   address       String
+  startTime     DateTime?
+  endTime       DateTime?
   totalCost     Int
   status        BookingStatus @default(PENDING)
   createdAt     DateTime      @default(now())

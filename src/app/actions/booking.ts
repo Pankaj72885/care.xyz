@@ -51,6 +51,8 @@ export async function createBooking(
         city: data.city,
         area: data.area,
         address: data.address,
+        startTime: data.startTime,
+        endTime: data.endTime,
         totalCost: calculatedCost,
         status: "PENDING", // Enforce correct Enum value
       },
